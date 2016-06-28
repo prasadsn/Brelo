@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/lock_list_border">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="18dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/lock_icon"
+        android:src="@drawable/closed"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/lock_icon"
+        android:id="@+id/title_layout"
+        android:layout_gravity="center_vertical">
+        <com.armor.brelo.ui.custom.BreloBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:id="@+id/lock_name"
+            android:text="Home Lock"/>
+        <com.armor.brelo.ui.custom.BreloTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lock_status"
+            android:text="CLOSED"/>
+    </LinearLayout>
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="10dp"
+        android:id="@+id/lock_share_icon"
+        android:src="@drawable/add_user"/>
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="9dp"
+        android:layout_toLeftOf="@id/lock_share_icon"
+        android:background="@drawable/lock_list_border"
+        android:src="@drawable/lock_list_border" />
+</RelativeLayout>

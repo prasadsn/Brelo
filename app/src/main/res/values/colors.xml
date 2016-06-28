@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brelo_primary_color">#57B0FF</color>
+    <color name="brelo_secondary_color">#FFFFFF</color>
+    <color name="light_gray">#f1f1f1</color>
+    <color name="brelo_background">#fafafa</color>
+    <color name="brelo_light_gray">#1d1d26</color>
+    <color name="list_lock_border">#11000000</color>
+    <color name="black">#000000</color>
+    <color name="dark">#1d1d26</color>
+    <color name="black_20">#33000000</color>
+    <color name="dark_sky_blue">#4a90e2</color>
+    <color name="black_12">#1f000000</color>
+    <color name="black_24">#3d000000</color>
+    <color name="black_2">#05000000</color>
+    <color name="black_4">#0a000000</color>
+    <color name="white_0">#00ffffff</color>
+    <color name="white_0_6">#0fffffff</color>
+    <color name="white_0_12">#1fffffff</color>
+    <color name="lightblue">#64b5f6</color>
+    <color name="water_blue">#1976d2</color>
+    <color name="black_40">#66000000</color>
+    <color name="azure">#2196f3</color>
+    <color name="tangerine">#ff8f00</color>
+    <color name="wheat">#ffe082</color>
+    <color name="white">#fafafa</color>
+    <color name="black_10">#1a000000</color>
+</resources>
