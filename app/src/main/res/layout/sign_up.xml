@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:orientation="vertical"
-            android:background="@color/light_gray"
+            android:background="@color/white"
             android:layout_weight="1"
             android:elevation="2dp"
             >
@@ -34,17 +34,18 @@
                 android:orientation="horizontal"
                 android:showDividers="middle" >
 
-                <Button
+                <com.armor.brelo.ui.custom.DINLTProBoldButton
                     android:id="@+id/btn_tab_sign_in"
-                    android:background="@xml/button_bottom_stroke"
+                    android:background="@drawable/button_bottom_stroke"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:layout_weight="1"
                     android:text="@string/btn_sign_in" />
 
-                <Button
+                <com.armor.brelo.ui.custom.DINLTProLightButton
                     android:id="@+id/btn_tab_sign_up"
-                    android:background="@xml/button_bottom_no_border"
+                    android:background="@drawable/button_bottom_no_border"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -53,7 +54,8 @@
         </LinearLayout>
         <ViewFlipper
             android:id="@+id/flipper"
-            android:layout_weight="4"
+            android:layout_weight="35"
+            android:background="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -63,23 +65,25 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:orientation="vertical" >
-                <com.armor.brelo.ui.custom.BreloTextView
+                <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_sign_in_username"/>
-                <EditText
+                <com.armor.brelo.ui.custom.DINLTProRegularEditText
+                    android:layout_marginTop="16dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     />
 
-                <com.armor.brelo.ui.custom.BreloTextView
+                <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="@string/label_sign_in_password"/>
-                <EditText
+                <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
                     android:inputType="textPassword"
                     />
             </LinearLayout>
@@ -90,46 +94,50 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:orientation="vertical" >
-                <com.armor.brelo.ui.custom.BreloTextView
+                <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_sign_up_fullname"/>
-                <EditText
+                <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
                     />
-                <com.armor.brelo.ui.custom.BreloTextView
+                <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_sign_up_email"/>
-                <EditText
+                <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
                     android:inputType="textEmailAddress"
                     />
-                <com.armor.brelo.ui.custom.BreloTextView
+                <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_sign_up_phonenumber"/>
-                <EditText
+                <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
                     android:inputType="phone"
                     />
 
-                <com.armor.brelo.ui.custom.BreloTextView
+                <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="@string/label_sign_in_password"/>
-                <EditText
+                <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
                     android:inputType="textPassword"
                     />
             </LinearLayout>
         </ViewFlipper>
-        <Button
+        <com.armor.brelo.ui.custom.BreloButton
             android:id="@+id/btn_sign_in"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

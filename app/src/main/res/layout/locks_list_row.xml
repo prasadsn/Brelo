@@ -24,7 +24,7 @@
         android:layout_toRightOf="@id/lock_icon"
         android:id="@+id/title_layout"
         android:layout_gravity="center_vertical">
-        <com.armor.brelo.ui.custom.BreloBoldTextView
+        <com.armor.brelo.ui.custom.DINLTProBoldButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
