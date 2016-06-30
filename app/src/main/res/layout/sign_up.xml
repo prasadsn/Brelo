@@ -19,12 +19,22 @@
             android:elevation="2dp"
             >
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="50dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
                 android:scaleType="center"
+                android:id="@+id/take_picture_icon"
                 android:src="@drawable/take_picture"
                 android:background="@xml/rounded_button"
+                android:visibility="gone"
+                android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="50dp"
+                android:scaleType="fitXY"
+                android:id="@+id/icon"
+                android:src="@drawable/brelo_icon_trans"
                 android:layout_gravity="center"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +80,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/label_sign_in_username"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/edit_text_sign_in_username"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     />
@@ -83,7 +94,8 @@
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/edit_text_sign_in_password"
                     android:inputType="textPassword"
                     />
             </LinearLayout>
@@ -101,39 +113,45 @@
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="16dp"
+                    android:id="@+id/edit_text_sign_up_fullname"
+                    android:layout_marginTop="10dp"
                     />
                 <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:text="@string/label_sign_up_email"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/edit_text_sign_up_email"
                     android:inputType="textEmailAddress"
                     />
                 <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:text="@string/label_sign_up_phonenumber"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     android:inputType="phone"
+                    android:id="@+id/edit_text_sign_up_phonenumber"
                     />
 
                 <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/label_sign_in_password"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     android:inputType="textPassword"
+                    android:id="@+id/edit_text_sign_up_password"
                     />
             </LinearLayout>
         </ViewFlipper>

@@ -11,7 +11,7 @@ public class DINLTProBoldButton extends Button {
 	public DINLTProBoldButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-				"fonts/DIN Next LT Pro Light.otf");
+				"fonts/DIN Next LT Pro Bold.otf");
 		setTypeface(font);
 		setTypeface(getTypeface(), Typeface.BOLD);
 	}
@@ -19,7 +19,7 @@ public class DINLTProBoldButton extends Button {
 	public DINLTProBoldButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-				"fonts/DIN Next LT Pro Light.otf");
+				"fonts/DIN Next LT Pro Bold.otf");
 		setTypeface(font);
 		setTypeface(getTypeface(), Typeface.BOLD);
 	}
@@ -27,7 +27,7 @@ public class DINLTProBoldButton extends Button {
 	public DINLTProBoldButton(Context context) {
 		super(context);
 		Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-				"fonts/DIN Next LT Pro Light.otf");
+				"fonts/DIN Next LT Pro Bold.otf");
 		setTypeface(font);
 		setTypeface(getTypeface(), Typeface.BOLD);
 	}
