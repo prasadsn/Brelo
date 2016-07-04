@@ -24,13 +24,15 @@
         android:layout_toRightOf="@id/lock_icon"
         android:id="@+id/title_layout"
         android:layout_gravity="center_vertical">
-        <com.armor.brelo.ui.custom.DINLTProBoldButton
+        <com.armor.brelo.ui.custom.DINLTProMediumTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
             android:id="@+id/lock_name"
             android:text="Home Lock"/>
-        <com.armor.brelo.ui.custom.BreloTextView
+        <com.armor.brelo.ui.custom.DINLTProRegularTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/lock_status"

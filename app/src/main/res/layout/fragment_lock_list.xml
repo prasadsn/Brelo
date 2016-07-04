@@ -4,9 +4,16 @@
     android:layout_height="match_parent"
     tools:context="com.armor.brelo.ui.LockListFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <com.armor.brelo.ui.custom.RecyclerViewEmptySupport
         android:id="@+id/locks_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <ImageView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/locks"
+        android:foregroundGravity="center"
+        android:visibility="gone"/>
 
 </RelativeLayout>

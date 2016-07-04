@@ -8,13 +8,6 @@ import io.realm.RealmObject;
 public class User extends RealmObject{
     private String fullName, email, phoneNumber, password;
 
-    public User(String fullName, String email, String phoneNumber, String password) {
-        this.fullName = fullName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-    }
-
     public String getFullName() {
         return fullName;
     }

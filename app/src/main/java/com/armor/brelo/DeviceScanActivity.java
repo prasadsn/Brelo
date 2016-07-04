@@ -44,6 +44,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.armor.brelo.ui.AddLockActivity;
+
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
@@ -242,7 +244,12 @@ public class DeviceScanActivity extends ListActivity {
 		BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
 		String deviceName = device.getName();
 		String deviceAddr = device.getAddress();
-		SharedPreferences pref = getSharedPreferences(PREF_NAME_REG_DEVICES, MODE_PRIVATE);
+		Intent intent = new Intent(DeviceScanActivity.this, AddLockActivity.class);
+		intent.putExtra("deviceName", deviceName);
+		intent.putExtra("deviceAddr", deviceAddr);
+		startActivity(intent);
+
+		/*SharedPreferences pref = getSharedPreferences(PREF_NAME_REG_DEVICES, MODE_PRIVATE);
 		String temp = pref.getString(deviceAddr, null);
 		if (temp == null) {
 			register.setEnabled(true);
@@ -260,7 +267,7 @@ public class DeviceScanActivity extends ListActivity {
 			intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
 			startActivity(intent);
 			finish();
-		}
+		}*/
 	}
 
 	@Override

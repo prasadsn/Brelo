@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/label_sign_in_username"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/label_bottom_margin"
                     android:id="@+id/edit_text_sign_in_username"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -89,12 +89,12 @@
                 <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/form_item_margin"
                     android:text="@string/label_sign_in_password"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/label_bottom_margin"
                     android:id="@+id/edit_text_sign_in_password"
                     android:inputType="textPassword"
                     />
@@ -114,29 +114,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:id="@+id/edit_text_sign_up_fullname"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/label_bottom_margin"
                     />
                 <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/form_item_margin"
                     android:text="@string/label_sign_up_email"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/label_bottom_margin"
                     android:id="@+id/edit_text_sign_up_email"
                     android:inputType="textEmailAddress"
                     />
                 <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/form_item_margin"
                     android:text="@string/label_sign_up_phonenumber"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/label_bottom_margin"
                     android:inputType="phone"
                     android:id="@+id/edit_text_sign_up_phonenumber"
                     />
@@ -144,12 +144,12 @@
                 <com.armor.brelo.ui.custom.DINLTProRegularTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/form_item_margin"
                     android:text="@string/label_sign_in_password"/>
                 <com.armor.brelo.ui.custom.DINLTProRegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/label_bottom_margin"
                     android:inputType="textPassword"
                     android:id="@+id/edit_text_sign_up_password"
                     />

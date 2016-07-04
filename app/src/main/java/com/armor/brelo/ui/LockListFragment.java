@@ -11,14 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.armor.brelo.R;
-import com.armor.brelo.model.Lock;
+import com.armor.brelo.db.model.Lock;
+import com.armor.brelo.ui.custom.RecyclerViewEmptySupport;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +31,7 @@ public abstract class LockListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     protected static final String ARG_PARAM1 = "param1";
-    private RecyclerView mRecyclerView;
+    private RecyclerViewEmptySupport mRecyclerView;
 
     public enum LOCKS {MY_LOCKS, SHARED_LOCKS};
 
@@ -56,11 +55,12 @@ public abstract class LockListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.fragment_lock_list, container, false);
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.locks_recycle_view);
+        mRecyclerView = (RecyclerViewEmptySupport) layout.findViewById(R.id.locks_recycle_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(new LocksAdapter(getLockList(), lockType));
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(10));
+        mRecyclerView.setEmptyView(getActivity().findViewById(R.id.empty_view));
         return layout;
     }
 
@@ -107,10 +107,10 @@ public abstract class LockListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-                holder.mLockName.setText(mListLock.get(position).getmLockName());
+                holder.mLockName.setText(mListLock.get(position).getLockName());
 //                holder.mLockStatus.setText(mListLock.get(position).getmLockStatus());
                 holder.mLockIcon.setImageResource(R.drawable.closed);
-                if(!(mListLock.get(position).getmLockStatus() == Lock.LOCK_STATUS.CLOSED.ordinal()))
+//                if(!(mListLock.get(position).getmLockStatus() == Lock.LOCK_STATUS.CLOSED.ordinal()))
                     holder.mLockIcon.setImageResource(R.drawable.open);
         }
 

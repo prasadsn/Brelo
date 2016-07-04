@@ -29,7 +29,7 @@ public class AuthenticationManager {
         User user = Realm.getDefaultInstance().createObject(User.class);
         user.setEmail(email);
         user.setFullName(fullName);
-        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
         user.setPassword(password);
         Realm.getDefaultInstance().commitTransaction();
     }

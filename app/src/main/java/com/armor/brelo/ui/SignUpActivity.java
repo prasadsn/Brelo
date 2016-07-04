@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -26,11 +27,15 @@ import android.widget.ViewFlipper;
 
 import com.armor.brelo.R;
 import com.armor.brelo.controller.AuthenticationManager;
+import com.armor.brelo.db.model.User;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class SignUpActivity extends Activity implements View.OnClickListener{
 
@@ -59,6 +64,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
         signUpEmail = (EditText) findViewById(R.id.edit_text_sign_up_email);
         signUpPhoneNumber = (EditText) findViewById(R.id.edit_text_sign_up_phonenumber);
         signUpPassword = (EditText) findViewById(R.id.edit_text_sign_up_password);
+        RealmResults<User> users = Realm.getDefaultInstance().where(User.class).findAll();
+        if(users!=null && users.size()>0){
+            signInUserName.setText(users.get(0).getEmail());
+            signInPassword.setText(users.get(0).getPassword());
+        }
     }
 
     @Override
@@ -90,17 +100,52 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
                 });
                 break;
             case R.id.btn_sign_in:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                 if(viewFlipper.getDisplayedChild() == 0){
                     CharSequence username = signInUserName.getText();
                     CharSequence password = signInPassword.getText();
-                    if(AuthenticationManager.isUserExists())
-                        if(AuthenticationManager.validateUser())
-                } else {
+                    if(TextUtils.isEmpty(username)){
+                        Toast toast = Toast.makeText(SignUpActivity.this, "Please enter Username", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    } else if(TextUtils.isEmpty(password)){
+                        Toast toast = Toast.makeText(SignUpActivity.this, "Please enter Password", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
 
-                }
-                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                    if(AuthenticationManager.isUserExists(username.toString())) {
+                        if (AuthenticationManager.validateUser(username.toString(), password.toString())) {
+                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast toast = Toast.makeText(SignUpActivity.this, "Invalid password!", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    } else {
+                        Toast toast = Toast.makeText(SignUpActivity.this, "User does not exist! Please Sign Up", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    CharSequence fullName = signUpFullname.getText();
+                    CharSequence email = signUpEmail.getText();
+                    CharSequence phoneNumber = signUpPhoneNumber.getText();
+                    CharSequence password = signUpPassword.getText();
+                    if(TextUtils.isEmpty(fullName) || TextUtils.isEmpty(email) ||
+                            TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(password)) {
+                        Toast toast = Toast.makeText(SignUpActivity.this, "Please enter all the details", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+                    AuthenticationManager.addUser(fullName.toString(), email.toString(), phoneNumber.toString(), password.toString());
+                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }}
+                });
                 break;
             case R.id.take_picture_icon:
                 dispatchTakePictureIntent();

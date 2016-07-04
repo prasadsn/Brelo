@@ -12,4 +12,149 @@
     tools:context="com.armor.brelo.ui.AddLockActivity"
     tools:showIn="@layout/activity_add_lock">
 
+    <com.armor.brelo.ui.custom.DINLTProRegularTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/lable1"
+        android:text="@string/label_name_your_lock"/>
+    <com.armor.brelo.ui.custom.DINLTProRegularEditText
+        android:layout_marginTop="@dimen/label_bottom_margin"
+        android:id="@+id/edit_text_lock_name"
+        android:layout_below="@id/lable1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_lock_name"
+        android:layout_marginTop="@dimen/form_item_margin"
+        android:id="@+id/layout_switch_night_mode"
+        android:orientation="horizontal">
+        <com.armor.brelo.ui.custom.DINLTProMediumTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="Night Mode"
+            android:id="@+id/label2"
+            />
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:background="@drawable/brelo_switch"
+            android:textOff=""
+            android:textOn=""
+            android:id="@+id/switch_night_mode"
+            android:layout_alignParentRight="true"
+            />
+
+    </LinearLayout>
+
+    <com.armor.brelo.ui.custom.DINLTProRegularTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:id="@+id/label3"
+        android:layout_below="@id/layout_switch_night_mode"
+        android:text="@string/label_add_time"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label3"
+        android:layout_toEndOf="@+id/layout_switch_night_mode"
+        android:layout_alignParentStart="true"
+        android:id="@+id/label_time">
+
+        <com.armor.brelo.ui.custom.DINLTProRegularTextView
+            android:layout_marginTop="@dimen/label_bottom_margin"
+            android:id="@+id/label_from_time"
+            android:layout_weight="1"
+            android:text="FROM TIME"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="20dp"
+            />
+        <com.armor.brelo.ui.custom.DINLTProRegularTextView
+            android:layout_marginTop="@dimen/label_bottom_margin"
+            android:id="@+id/label_to_time"
+            android:layout_weight="1"
+            android:text="TO TIME"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_time"
+        android:layout_alignParentStart="true"
+        android:id="@+id/layout_from_to_time">
+
+        <com.armor.brelo.ui.custom.DINLTProRegularEditText
+            android:layout_marginTop="@dimen/label_bottom_margin"
+            android:id="@+id/edit_text_from_time"
+            android:layout_weight="1"
+            android:text="10:00AM"
+            android:drawableEnd="@drawable/time"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            />
+        <com.armor.brelo.ui.custom.DINLTProRegularEditText
+            android:layout_marginTop="@dimen/label_bottom_margin"
+            android:id="@+id/edit_text_to_time"
+            android:layout_weight="1"
+            android:text="10:00PM"
+            android:drawableEnd="@drawable/time"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_from_to_time"
+        android:layout_marginTop="@dimen/form_item_margin"
+        android:id="@+id/layout_switch_auto_unlock"
+        android:orientation="horizontal">
+        <com.armor.brelo.ui.custom.DINLTProMediumTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="Auto Unlock"
+            />
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:background="@drawable/brelo_switch"
+            android:id="@+id/switch_auto_lock"
+            android:textOff=""
+            android:textOn=""
+            android:layout_alignParentRight="true"
+            />
+
+    </LinearLayout>
+
+    <com.armor.brelo.ui.custom.DINLTProRegularTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_item_margin"
+        android:id="@+id/label5"
+        android:layout_below="@id/layout_switch_auto_unlock"
+        android:text="@string/info_auto_unlock"/>
+
 </RelativeLayout>

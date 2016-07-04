@@ -2,7 +2,7 @@ package com.armor.brelo.ui;
 
 import android.os.Bundle;
 
-import com.armor.brelo.model.Lock;
+import com.armor.brelo.db.model.Lock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +40,9 @@ public class MyLockListFragment extends LockListFragment {
 
     private List<Lock> getTestDataMyLocks(){
         List<Lock> list = new ArrayList<Lock>();
-        list.add(new Lock("Home Lock", Lock.LOCK_STATUS.OPEN.ordinal(), true));
-        list.add(new Lock("Form House Lock", Lock.LOCK_STATUS.CLOSED.ordinal(), true));
-        list.add(new Lock("Office Lock", Lock.LOCK_STATUS.LOCKED.ordinal(), true));
+//        list.add(new Lock("Home Lock", Lock.LOCK_STATUS.OPEN.ordinal(), true));
+//        list.add(new Lock("Form House Lock", Lock.LOCK_STATUS.CLOSED.ordinal(), true));
+//        list.add(new Lock("Office Lock", Lock.LOCK_STATUS.LOCKED.ordinal(), true));
         return list;
     }
 

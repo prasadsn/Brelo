@@ -53,6 +53,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, DeviceScanActivity.class);
+                intent = new Intent(MainActivity.this, AddLockActivity.class);
                 startActivity(intent);
             }
         });

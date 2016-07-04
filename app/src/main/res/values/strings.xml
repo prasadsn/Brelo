@@ -46,4 +46,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_add_lock">AddLockActivity</string>
+    <string name="label_name_your_lock">NAME YOUR LOCK</string>
+    <string name="label_add_time">Automatically lock the door during a certain time period</string>
+    <string name="info_auto_unlock">Automatically unlocks the lock when you come in 2 meters range of the lock</string>
 </resources>
