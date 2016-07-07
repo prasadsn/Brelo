@@ -54,6 +54,7 @@ public class BluetoothLeService extends Service {
 	private int mConnectionState = STATE_DISCONNECTED;
 
 	private String UUID_Service_str = "00001523-1212-efde-1523-785feabcd123";
+//	private String UUID_Service_str = "00001530-1212-efde-1523-785feabcd123";
 	private String UUID_Characteristic_str = "00001524-1212-efde-1523-785feabcd123";
 
 	private String UUID_Characteristic_read_status = "00001525-1212-efde-1523-785feabcd123";

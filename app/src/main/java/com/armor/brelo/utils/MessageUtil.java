@@ -1,5 +1,7 @@
 package com.armor.brelo.utils;
 
+import java.math.BigInteger;
+
 public class MessageUtil {
 
 	/**
@@ -55,19 +57,23 @@ public class MessageUtil {
 		//syso.log("previousIdx"+previousIdx);
 		//console.log("currentIdx"+currentIdx);
 		if (previousIdx == currentIdx) {
-			dummVal[0] = 0x00;
+			BigInteger integer = BigInteger.valueOf(0xAA);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (currentIdx == -1) {
-			dummVal[0] = 0x11;
+			BigInteger integer = BigInteger.valueOf(0xA1);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 1 && currentIdx == 2) {
-			dummVal[0] = 0x12;
+			BigInteger integer = BigInteger.valueOf(0xCC);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 1 && currentIdx == 3) {
-			dummVal[0] = 0x13;
+			BigInteger integer = BigInteger.valueOf(0xC1);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 1 && currentIdx == 4) {
@@ -75,11 +81,13 @@ public class MessageUtil {
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 2 && currentIdx == 1) {
-			dummVal[0] = 0x21;
+			BigInteger integer = BigInteger.valueOf(0xA1);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 2 && currentIdx == 3) {
-			dummVal[0] = 0x23;
+			BigInteger integer = BigInteger.valueOf(0xAA);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 2 && currentIdx == 4) {
@@ -88,11 +96,13 @@ public class MessageUtil {
 			return dummVal;
 
 		} else if (previousIdx == 3 && currentIdx == 1) {
-			dummVal[0] = 0x31;
+			BigInteger integer = BigInteger.valueOf(0xCC);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 3 && currentIdx == 2) {
-			dummVal[0] = 0x32;
+			BigInteger integer = BigInteger.valueOf(0xAA);
+			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 3 && currentIdx == 4) {

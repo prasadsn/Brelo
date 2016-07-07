@@ -1,6 +1,7 @@
 package com.armor.brelo.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.armor.brelo.DeviceControlActivity;
+import com.armor.brelo.DeviceScanActivity;
 import com.armor.brelo.R;
 import com.armor.brelo.db.model.Lock;
 import com.armor.brelo.ui.custom.RecyclerViewEmptySupport;
@@ -58,9 +61,16 @@ public abstract class LockListFragment extends Fragment {
         mRecyclerView = (RecyclerViewEmptySupport) layout.findViewById(R.id.locks_recycle_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setEmptyView(layout.findViewById(R.id.empty_view));
         mRecyclerView.setAdapter(new LocksAdapter(getLockList(), lockType));
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(10));
-        mRecyclerView.setEmptyView(getActivity().findViewById(R.id.empty_view));
+        layout.findViewById(R.id.empty_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DeviceScanActivity.class);
+                startActivity(intent);
+            }
+        });
         return layout;
     }
 
@@ -110,6 +120,7 @@ public abstract class LockListFragment extends Fragment {
                 holder.mLockName.setText(mListLock.get(position).getLockName());
 //                holder.mLockStatus.setText(mListLock.get(position).getmLockStatus());
                 holder.mLockIcon.setImageResource(R.drawable.closed);
+                holder.mLockMacAddress = mListLock.get(position).getMacAddress();
 //                if(!(mListLock.get(position).getmLockStatus() == Lock.LOCK_STATUS.CLOSED.ordinal()))
                     holder.mLockIcon.setImageResource(R.drawable.open);
         }
@@ -119,18 +130,28 @@ public abstract class LockListFragment extends Fragment {
             return mListLock.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             ImageView mLockIcon = null;
             TextView mLockName = null;
             TextView mLockStatus = null;
             ImageView mShareIcon = null;
+            String mLockMacAddress = null;
             public ViewHolder(View v){
                 super(v);
                 RelativeLayout layout = (RelativeLayout) v;
+                layout.setOnClickListener(this);
                 mLockIcon = (ImageView) layout.findViewById(R.id.lock_icon);
                 mLockName = (TextView) layout.findViewById(R.id.lock_name);
                 mLockStatus = (TextView) layout.findViewById(R.id.lock_status);
                 mShareIcon = (ImageView) layout.findViewById(R.id.lock_share_icon);
+            }
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
+                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, mLockName.getText());
+                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, mLockMacAddress);
+                startActivity(intent);
             }
         }
     }

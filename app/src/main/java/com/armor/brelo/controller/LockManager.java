@@ -28,4 +28,9 @@ public class LockManager {
         lock.setAutoUnlockEnabled(autoLockEnabled);
         Realm.getDefaultInstance().commitTransaction();
     }
+
+    public static RealmResults<Lock> getAllLocks() {
+        RealmResults<Lock> locks = Realm.getDefaultInstance().where(Lock.class).findAll();
+        return locks;
+    }
 }

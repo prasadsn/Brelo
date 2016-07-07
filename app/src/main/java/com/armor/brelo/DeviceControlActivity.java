@@ -145,7 +145,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.seekbar);
+		setContentView(R.layout.lock_handler);
 
 		final Intent intent = getIntent();
 		mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -154,8 +154,8 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(ArmorService.NOTIFICATION_ID);
 		if (getIntent().getBooleanExtra("NOTIFICATION", false))
 			ArmorService.isNotificationActive = false;
-		getActionBar().setTitle(mDeviceName);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+//		getActionBar().setTitle(mDeviceName);
+//		getActionBar().setDisplayHomeAsUpEnabled(true);
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
 		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 	}
@@ -292,7 +292,8 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 			//mBluetoothLeService.sendCommand(op_data.getBytes());
 			//byte[] bytes = ByteBuffer.allocate(4).putInt(1695609641).array();
 
-			mBluetoothLeService.sendCommand(MessageUtil.getOpData(currentLockIndex, index));
+			byte[] command = MessageUtil.getOpData(currentLockIndex, index);
+			mBluetoothLeService.sendCommand(command);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -320,11 +321,11 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 		//	}
 			sendUnlockCommand(1);
 			currentLockIndex = 2;
-			handler.postDelayed(new Runnable(){
+			/*handler.postDelayed(new Runnable(){
 				public void run(){
 					updateUi(2);
 				}
-			}, DELAYui);
+			}, DELAYui);*/
 		//	try {
 		//		Thread.sleep(2000);                 //2000 milliseconds is one second.
 		//	} catch(InterruptedException ex) {

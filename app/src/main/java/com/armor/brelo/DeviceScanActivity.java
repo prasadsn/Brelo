@@ -91,7 +91,7 @@ public class DeviceScanActivity extends ListActivity {
 		}
 		register = new Button(this);
 		register.setText("Register");
-		getListView().addHeaderView(register);
+//		getListView().addHeaderView(register);
 		if (isMyServiceRunning(ArmorService.class))
 			return;
 		Intent serviceIntent = new Intent(DeviceScanActivity.this, ArmorService.class);

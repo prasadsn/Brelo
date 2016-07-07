@@ -35,6 +35,7 @@ public class AddLockActivity extends AppCompatActivity {
                 Switch nightModeEnabled = (Switch) findViewById(R.id.switch_night_mode);
                 Switch autoUnlockEnabled = (Switch) findViewById(R.id.switch_auto_lock);
                 LockManager.addLock(mLockMacAddress, lockName.getText().toString(), fromTime.getText().toString(), toTime.getText().toString(), nightModeEnabled.isChecked(), autoUnlockEnabled.isChecked());
+                finish();
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
             }
