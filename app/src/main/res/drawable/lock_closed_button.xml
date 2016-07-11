@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- larger circle at the back -->
+    <item android:height="254dp" android:width="254dp" android:gravity="center">
+        <shape
+            android:shape="oval">
+
+            <solid
+                android:color="#ff8f00"/>
+
+            <!-- thicker outer boarder -->
+            <stroke
+                android:width="2dp"
+                android:color="#ff8f00"/>
+        </shape>
+    </item>
+</layer-list>

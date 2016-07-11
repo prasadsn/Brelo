@@ -4,6 +4,8 @@
     android:layout_height="match_parent" >
 
     <SwitchPreference
+        android:background="@drawable/brelo_switch"
+        android:thumb="@drawable/switch_thumb"
         android:key="auto_unlock"
         android:title="Auto Unlock" />
     <SwitchPreference

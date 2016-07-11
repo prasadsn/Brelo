@@ -12,8 +12,7 @@ public class Lock extends RealmObject{
     private String toDate;
     private boolean autoUnlockEnabled;
     private String macAddress;
-
-    public enum LOCK_STATUS {OPEN, CLOSED, LOCKED};
+    private int lockStatus;
 
     public String getMacAddress() {
         return macAddress;
@@ -60,5 +59,13 @@ public class Lock extends RealmObject{
 
     public void setAutoUnlockEnabled(boolean autoUnlockEnabled) {
         this.autoUnlockEnabled = autoUnlockEnabled;
+    }
+
+    public int getLockStatus() {
+        return lockStatus;
+    }
+
+    public void setLockStatus(int lockStatus) {
+        this.lockStatus = lockStatus;
     }
 }

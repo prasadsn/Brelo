@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -119,6 +120,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 				byte data = intent.getByteExtra(BluetoothLeService.EXTRA_DATA, (byte) 0);
 				Log.e(TAG, "Read characteristing data  " + data);
 				currentLockIndex = data;
+/*
 				LinearLayout layout = (LinearLayout) findViewById(R.id.lock_pointer_layout);
 				updateUi(data);
 				for (int i = 0; i < layout.getChildCount(); i++)
@@ -126,6 +128,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 				layout = (LinearLayout) findViewById(R.id.lock_layout);
 				for (int i = 0; i < layout.getChildCount(); i++)
 					layout.getChildAt(i).setOnClickListener(DeviceControlActivity.this);
+*/
 
 				// drawLockGrids();
 			}
@@ -163,6 +166,38 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		View btnLock = findViewById(R.id.btn_lock);
+		btnLock.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LinearLayout) findViewById(R.id.btn_lock)).getChildAt(0).getLayoutParams();
+				((LinearLayout) findViewById(R.id.btn_lock)).removeAllViews();
+				View view = getLayoutInflater().inflate(R.layout.lock_closed, null);
+				switch (currentLockIndex) {
+					case 0:
+						view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+						((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+						break;
+					case 1:
+						view = getLayoutInflater().inflate(R.layout.lock_locked, null);
+						view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+						((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+						break;
+					case 2:
+						view = getLayoutInflater().inflate(R.layout.lock_open, null);
+						view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+						((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+						break;
+				}
+
+			}
+		});
+		btnLock.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				return true;
+			}
+		});
 		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 		if (mBluetoothLeService != null) {
 			final boolean result = mBluetoothLeService.connect(mDeviceAddress);

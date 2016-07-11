@@ -5,7 +5,7 @@
     android:layout_centerInParent="true"
     android:id="@+id/btn_lock"
     android:elevation="50dp"
-    android:background="@xml/lock_open_button"
+    android:background="@drawable/lock_open_button"
     android:orientation="vertical">
     <ImageView
         android:layout_width="wrap_content"

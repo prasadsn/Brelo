@@ -20,19 +20,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.armor.brelo.DeviceScanActivity;
 import com.armor.brelo.R;
+import com.armor.brelo.SettingsActivity;
 import com.viewpagerindicator.IconPageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.UnderlinePageIndicator;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
 
     static final int ITEMS = 2;
     ViewPager mPager;
@@ -53,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, DeviceScanActivity.class);
+//                Intent intent = new Intent(MainActivity.this, AddLockActivity.class);
                 startActivity(intent);
             }
         });
@@ -78,6 +82,7 @@ public class MainActivity extends ActionBarActivity {
         });
         mListView = (ListView) findViewById(R.id.listView);
         mListView.setAdapter(new NavigationMenuAdapter());
+        mListView.setOnItemClickListener(this);
         mListView.setDivider(null);
     }
 
@@ -101,6 +106,19 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+            default:
+        }
     }
 
     private class NavigationMenuAdapter extends BaseAdapter {
