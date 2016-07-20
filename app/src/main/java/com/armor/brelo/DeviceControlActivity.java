@@ -51,7 +51,7 @@ import com.armor.brelo.utils.MessageUtil;
  * the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends FragmentActivity {
+public class DeviceControlActivity extends FragmentActivity implements LockFragment.OnLockChangeListener{
 	private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
 	public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -167,47 +167,6 @@ public class DeviceControlActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		View btnLock = findViewById(R.id.btn_lock);
-		btnLock.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				switch (currentLockIndex) {
-					case 1:
-						mLockFragment.updateLockUI(2);
-						sendUnlockCommand(2);
-//						currentLockIndex = 2;
-						break;
-					case 2:
-						mLockFragment.updateLockUI(3);
-						sendUnlockCommand(3);
-//						currentLockIndex = 3;
-						break;
-					case 3:
-//						updateLockUI(3);
-//						sendUnlockCommand(3);
-//						currentLockIndex = 3;
-						break;
-			}
-
-			}
-
-		});
-		btnLock.setOnLongClickListener(new View.OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				switch (currentLockIndex) {
-					case 3:
-						mLockFragment.updateLockUI(1);
-						sendUnlockCommand(1);
-//						currentLockIndex = 1;
-						break;
-					default:
-						break;
-				}
-				return true;
-			}
-		});
 		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 		if (mBluetoothLeService != null) {
 			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
@@ -294,5 +253,10 @@ public class DeviceControlActivity extends FragmentActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onLockChanged(int position) {
+
 	}
 }

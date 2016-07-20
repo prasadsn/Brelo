@@ -1,9 +1,11 @@
 package com.armor.brelo.ui;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,10 @@ import com.hookedonplay.decoviewlib.events.DecoEvent;
 /**
  * Created by prsn0001 on 7/20/2016.
  */
-public class LockFragment extends DecoAnimationFragment {
+public class LockFragment extends DecoAnimationFragment implements View.OnClickListener, View.OnLongClickListener{
     private int mSeries1Index;
     private int mPieIndex;
+    private OnLockChangeListener lockChangeListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +35,31 @@ public class LockFragment extends DecoAnimationFragment {
     @Override
     protected void setupEvents() {
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            lockChangeListener = (OnLockChangeListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        View btnLock = getActivity().findViewById(R.id.btn_lock);
+        btnLock.setOnClickListener(this);
+        btnLock.setOnLongClickListener(this);
     }
 
     @Override
@@ -50,6 +78,46 @@ public class LockFragment extends DecoAnimationFragment {
         playLockAnimation(getDecoView(), eventListener);
     }
 
+    @Override
+    public void onClick(View v) {
+
+        switch (currentLockIndex) {
+            case 1:
+                updateLockUI(2);
+                sendUnlockCommand(2);
+//						currentLockIndex = 2;
+                break;
+            case 2:
+                updateLockUI(3);
+                sendUnlockCommand(3);
+//						currentLockIndex = 3;
+                break;
+            case 3:
+//						updateLockUI(3);
+//						sendUnlockCommand(3);
+//						currentLockIndex = 3;
+                break;
+        }
+
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+            switch (currentLockIndex) {
+                case 3:
+                    mLockFragment.updateLockUI(1);
+                    sendUnlockCommand(1);
+//						currentLockIndex = 1;
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+
+    public interface OnLockChangeListener {
+        public void onLockChanged(int position);
+    }
     public void updateLockUI(int lockStatus) {
         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.btn_lock);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getChildAt(0).getLayoutParams();
@@ -103,7 +171,7 @@ public class LockFragment extends DecoAnimationFragment {
         SeriesItem seriesBack1Item = new SeriesItem.Builder(Color.parseColor("#ffffff"))
                 .setRange(0, seriesMax, 0)
                 .setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
-                .setSpinDuration(1000)
+                .setSpinDuration(2000)
                 .setInset(new PointF(circleInset, circleInset))
                 .build();
 
@@ -112,7 +180,7 @@ public class LockFragment extends DecoAnimationFragment {
         SeriesItem series1Item = new SeriesItem.Builder(Color.parseColor("#ffffff"))
                 .setRange(0, seriesMax, 0)
                 .setLineWidth(getDimension(36))
-                .setSpinDuration(1000)
+                .setSpinDuration(2000)
                 .setInterpolator(new LinearInterpolator())
                 .build();
 
