@@ -14,6 +14,7 @@
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:src="@drawable/lock_locked_button1"/>
     <com.hookedonplay.decoviewlib.DecoView
         android:id="@+id/dynamicArcView"

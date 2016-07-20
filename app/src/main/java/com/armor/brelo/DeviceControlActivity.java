@@ -19,6 +19,7 @@ package com.armor.brelo;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.BroadcastReceiver;
@@ -29,16 +30,16 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.armor.brelo.ui.LockFragment;
 import com.armor.brelo.utils.MessageUtil;
 
 /**
@@ -50,7 +51,7 @@ import com.armor.brelo.utils.MessageUtil;
  * the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity implements OnClickListener {
+public class DeviceControlActivity extends FragmentActivity {
 	private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
 	public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -68,6 +69,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 
 	private final String LIST_NAME = "NAME";
 	private final String LIST_UUID = "UUID";
+	private LockFragment mLockFragment;
 
 	// Code to manage Service lifecycle.
 	private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -124,51 +126,13 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						updateLockUI(currentLockIndex);
+						mLockFragment.updateLockUI(currentLockIndex);
 					}
 				});
-/*
-				LinearLayout layout = (LinearLayout) findViewById(R.id.lock_pointer_layout);
-				updateUi(data);
-				for (int i = 0; i < layout.getChildCount(); i++)
-					layout.getChildAt(i).setOnClickListener(DeviceControlActivity.this);
-				layout = (LinearLayout) findViewById(R.id.lock_layout);
-				for (int i = 0; i < layout.getChildCount(); i++)
-					layout.getChildAt(i).setOnClickListener(DeviceControlActivity.this);
-*/
-
-				// drawLockGrids();
 			}
 		}
 	};
 
-	private void updateLockUI(int lockStatus) {
-		LinearLayout layout = (LinearLayout) findViewById(R.id.btn_lock);
-		LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getChildAt(0).getLayoutParams();
-		((LinearLayout) findViewById(R.id.btn_lock)).removeAllViews();
-		View view = null;
-		switch (lockStatus) {
-			case 1:
-				view = getLayoutInflater().inflate(R.layout.lock_open, null);
-				//view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
-				((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
-//				currentLockIndex = 1;
-				break;
-			case 2:
-				view = getLayoutInflater().inflate(R.layout.lock_closed, null);
-				view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
-				((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
-//				currentLockIndex = 2;
-				break;
-			case 3:
-				view = getLayoutInflater().inflate(R.layout.lock_locked, null);
-				view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
-				((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
-//				currentLockIndex = 3;
-				break;
-		}
-
-	}
 
 	protected void onStop() {
 		super.onStop();
@@ -189,12 +153,13 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 		mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
 		mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
+		mLockFragment = (LockFragment) getSupportFragmentManager().findFragmentById(R.id.btn_lock);
 		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(ArmorService.NOTIFICATION_ID);
 		if (getIntent().getBooleanExtra("NOTIFICATION", false))
 			ArmorService.isNotificationActive = false;
 //		getActionBar().setTitle(mDeviceName);
 //		getActionBar().setDisplayHomeAsUpEnabled(true);
-		updateLockUI(currentLockIndex);
+		mLockFragment.updateLockUI(currentLockIndex);
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
 		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 	}
@@ -209,12 +174,12 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 
 				switch (currentLockIndex) {
 					case 1:
-						updateLockUI(2);
+						mLockFragment.updateLockUI(2);
 						sendUnlockCommand(2);
 //						currentLockIndex = 2;
 						break;
 					case 2:
-						updateLockUI(3);
+						mLockFragment.updateLockUI(3);
 						sendUnlockCommand(3);
 //						currentLockIndex = 3;
 						break;
@@ -233,7 +198,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 			public boolean onLongClick(View v) {
 				switch (currentLockIndex) {
 					case 3:
-						updateLockUI(1);
+						mLockFragment.updateLockUI(1);
 						sendUnlockCommand(1);
 //						currentLockIndex = 1;
 						break;
@@ -321,126 +286,13 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 		return intentFilter;
 	}
 
-	private void hideAllPointers() {
-		LinearLayout layout = (LinearLayout) findViewById(R.id.lock_pointer_layout);
-		for (int i = 0; i < layout.getChildCount(); i++)
-			layout.getChildAt(i).setVisibility(View.INVISIBLE);
-	}
-
-
-	public void updateUi(int pos){
-		hideAllPointers();
-		switch (pos) {
-
-			case 1:
-				findViewById(R.id.lock_pointer_0).setVisibility(View.VISIBLE);
-
-				break;
-
-			case 0:
-				findViewById(R.id.lock_pointer_00).setVisibility(View.VISIBLE);
-
-				break;
-
-			case 2:
-				findViewById(R.id.lock_pointer_1).setVisibility(View.VISIBLE);
-
-				break;
-
-			case 3:
-				findViewById(R.id.lock_pointer_2).setVisibility(View.VISIBLE);
-
-				break;
-
-			case 4:
-				findViewById(R.id.lock_pointer_3).setVisibility(View.VISIBLE);
-
-				break;
-
-			default:
-				break;
-		}
-	}
-
-
 	private void sendUnlockCommand(int index) {
 		try {
-			//String op_data = MessageUtil.getOpData(currentLockIndex, index) + "";
-			//byte[] op_data1 = op_data.getBytes();
-			//System.out.println("op_dataop_dataop_dataop_dataop_dataop_data:: "+op_data+"get bytes "+op_data.getBytes());
-			//Log. ("op_dataop_dataop_dataop_dataop_dataop_data:: "+op_data);
-			//mBluetoothLeService.sendCommand(op_data.getBytes());
-			//byte[] bytes = ByteBuffer.allocate(4).putInt(1695609641).array();
-
 			byte[] command = MessageUtil.getOpData(currentLockIndex, index);
 			mBluetoothLeService.sendCommand(command);
 			currentLockIndex = index;
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-	}
-
-
-
-	@Override
-	public void onClick(View v) {
-		hideAllPointers();
-
-		final Handler handler = new Handler();
-
-		switch (v.getId()) {
-		case R.id.lock_0:
-		case R.id.lock_pointer_0:
-			findViewById(R.id.lock_pointer_0).setVisibility(View.VISIBLE);
-
-		//	updateUi(1);
-			//try {
-		//		Thread.sleep(2000);                 //2000 milliseconds is one second.
-		//	} catch(InterruptedException ex) {
-		//		Thread.currentThread().interrupt();
-		//	}
-			sendUnlockCommand(1);
-			currentLockIndex = 2;
-			/*handler.postDelayed(new Runnable(){
-				public void run(){
-					updateUi(2);
-				}
-			}, DELAYui);*/
-		//	try {
-		//		Thread.sleep(2000);                 //2000 milliseconds is one second.
-		//	} catch(InterruptedException ex) {
-		//		Thread.currentThread().interrupt();
-		//	}
-		//	updateUi(2);
-			break;
-		case R.id.lock_00:
-		case R.id.lock_pointer_00:
-			findViewById(R.id.lock_pointer_00).setVisibility(View.VISIBLE);
-			sendUnlockCommand(-1);
-			currentLockIndex = 1;
-			break;
-		case R.id.lock_1:
-		case R.id.lock_pointer_1:
-			findViewById(R.id.lock_pointer_1).setVisibility(View.VISIBLE);
-			sendUnlockCommand(2);
-			currentLockIndex = 2;
-			break;
-		case R.id.lock_2:
-		case R.id.lock_pointer_2:
-			findViewById(R.id.lock_pointer_2).setVisibility(View.VISIBLE);
-			sendUnlockCommand(3);
-			currentLockIndex = 3;
-			break;
-		case R.id.lock_3:
-		case R.id.lock_pointer_3:
-			findViewById(R.id.lock_pointer_3).setVisibility(View.VISIBLE);
-			sendUnlockCommand(4);
-			currentLockIndex = 4;
-			break;
-
-		default:
-			break;
 		}
 	}
 }
