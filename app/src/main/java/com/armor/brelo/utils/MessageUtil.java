@@ -53,41 +53,43 @@ public class MessageUtil {
 		System.out.println("currentIdx" + currentIdx);
 		byte[] dummVal = new byte[1];
 		byte[] zero = new byte[1];
-		zero[0]=0x00;
+		zero[0] = 0x00;
 		//syso.log("previousIdx"+previousIdx);
 		//console.log("currentIdx"+currentIdx);
 		if (previousIdx == currentIdx) {
-			BigInteger integer = BigInteger.valueOf(0xAA);
+			/*BigInteger integer = BigInteger.valueOf(0xA1);
 			dummVal = integer.toByteArray();
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
-			return dummVal;
+			return dummVal;*/
+			return zero;
 		} else if (currentIdx == -1) {
 			BigInteger integer = BigInteger.valueOf(0xA1);
-			dummVal = integer.toByteArray();
+			dummVal[0] = (byte) 0xA1;
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
-		} else if (previousIdx == 1 && currentIdx == 2) {
-			BigInteger integer = BigInteger.valueOf(0xCC);
-			dummVal = integer.toByteArray();
+		} else if (previousIdx == 3 && currentIdx == 1) {
+			BigInteger integer = BigInteger.valueOf(0xAA);
+			dummVal[0] = (byte) 0xAA;
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
-		} else if (previousIdx == 1 && currentIdx == 3) {
-			BigInteger integer = BigInteger.valueOf(0xC1);
-			dummVal = integer.toByteArray();
-			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
-			return dummVal;
-		} else if (previousIdx == 1 && currentIdx == 4) {
-			dummVal[0] = 0x14;
-			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
-			return dummVal;
-		} else if (previousIdx == 2 && currentIdx == 1) {
+		} else if (previousIdx == 3 && currentIdx == 2) {
 			BigInteger integer = BigInteger.valueOf(0xA1);
-			dummVal = integer.toByteArray();
+			dummVal[0] = (byte) 0xA1;
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 2 && currentIdx == 3) {
-			BigInteger integer = BigInteger.valueOf(0xAA);
-			dummVal = integer.toByteArray();
+			BigInteger integer = BigInteger.valueOf(0xCC);
+			dummVal[0] = (byte) 0xCC;
+			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
+			return dummVal;
+		} else if (previousIdx == 2 && currentIdx == 1) {
+			BigInteger integer = BigInteger.valueOf(0xC1);
+			dummVal[0] = (byte) 0xC1;
+			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
+			return dummVal;
+		} else if (previousIdx == 2 && currentIdx == 3) {
+			BigInteger integer = BigInteger.valueOf(0xA1);
+			dummVal[0] = (byte) 0xA1;
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 2 && currentIdx == 4) {
@@ -96,34 +98,16 @@ public class MessageUtil {
 			return dummVal;
 
 		} else if (previousIdx == 3 && currentIdx == 1) {
-			BigInteger integer = BigInteger.valueOf(0xCC);
-			dummVal = integer.toByteArray();
+			BigInteger integer = BigInteger.valueOf(0xC1);
+			dummVal[0] = (byte) 0xC1;
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
 		} else if (previousIdx == 3 && currentIdx == 2) {
-			BigInteger integer = BigInteger.valueOf(0xAA);
-			dummVal = integer.toByteArray();
+			BigInteger integer = BigInteger.valueOf(0xA1);
+			dummVal[0] = (byte) 0xA1;
 			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
 			return dummVal;
-		} else if (previousIdx == 3 && currentIdx == 4) {
-			dummVal[0] = 0x34;
-			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
-			return dummVal;
-		} else if (previousIdx == 4 && currentIdx == 1) {
-			dummVal[0] = 0x41;
-			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
-			return dummVal;
-		} else if (previousIdx == 4 && currentIdx == 2) {
-			dummVal[0] = 0x42;
-			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
-			return dummVal;
-		} else if (previousIdx == 4 && currentIdx == 3) {
-			dummVal[0] = 0x43;
-			System.out.println("dummVal String: " + dummVal[0] + "byte dummVal " + dummVal);
-			return dummVal;
-		}
-		else
+		} else
 			return zero;
-
 	}
 }

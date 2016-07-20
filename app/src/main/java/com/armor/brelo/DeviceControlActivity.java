@@ -36,6 +36,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.armor.brelo.utils.MessageUtil;
@@ -62,7 +63,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 	private boolean mConnected = false;
 	private BluetoothGattCharacteristic mNotifyCharacteristic;
 
-	private static int currentLockIndex = 2;
+	private int currentLockIndex = 3;
 	private static int DELAYui = 5000;					// 2000 milliseconds
 
 	private final String LIST_NAME = "NAME";
@@ -120,6 +121,12 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 				byte data = intent.getByteExtra(BluetoothLeService.EXTRA_DATA, (byte) 0);
 				Log.e(TAG, "Read characteristing data  " + data);
 				currentLockIndex = data;
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						updateLockUI(currentLockIndex);
+					}
+				});
 /*
 				LinearLayout layout = (LinearLayout) findViewById(R.id.lock_pointer_layout);
 				updateUi(data);
@@ -134,6 +141,34 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 			}
 		}
 	};
+
+	private void updateLockUI(int lockStatus) {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.btn_lock);
+		LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getChildAt(0).getLayoutParams();
+		((LinearLayout) findViewById(R.id.btn_lock)).removeAllViews();
+		View view = null;
+		switch (lockStatus) {
+			case 1:
+				view = getLayoutInflater().inflate(R.layout.lock_open, null);
+				//view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+				((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+//				currentLockIndex = 1;
+				break;
+			case 2:
+				view = getLayoutInflater().inflate(R.layout.lock_closed, null);
+				view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+				((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+//				currentLockIndex = 2;
+				break;
+			case 3:
+				view = getLayoutInflater().inflate(R.layout.lock_locked, null);
+				view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+				((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+//				currentLockIndex = 3;
+				break;
+		}
+
+	}
 
 	protected void onStop() {
 		super.onStop();
@@ -159,6 +194,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 			ArmorService.isNotificationActive = false;
 //		getActionBar().setTitle(mDeviceName);
 //		getActionBar().setDisplayHomeAsUpEnabled(true);
+		updateLockUI(currentLockIndex);
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
 		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 	}
@@ -170,31 +206,40 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 		btnLock.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LinearLayout) findViewById(R.id.btn_lock)).getChildAt(0).getLayoutParams();
-				((LinearLayout) findViewById(R.id.btn_lock)).removeAllViews();
-				View view = getLayoutInflater().inflate(R.layout.lock_closed, null);
+
 				switch (currentLockIndex) {
-					case 0:
-						view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
-						((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
-						break;
 					case 1:
-						view = getLayoutInflater().inflate(R.layout.lock_locked, null);
-						view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
-						((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+						updateLockUI(2);
+						sendUnlockCommand(2);
+//						currentLockIndex = 2;
 						break;
 					case 2:
-						view = getLayoutInflater().inflate(R.layout.lock_open, null);
-						view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
-						((LinearLayout) findViewById(R.id.btn_lock)).addView(view, params);
+						updateLockUI(3);
+						sendUnlockCommand(3);
+//						currentLockIndex = 3;
 						break;
-				}
+					case 3:
+//						updateLockUI(3);
+//						sendUnlockCommand(3);
+//						currentLockIndex = 3;
+						break;
+			}
 
 			}
+
 		});
 		btnLock.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
+				switch (currentLockIndex) {
+					case 3:
+						updateLockUI(1);
+						sendUnlockCommand(1);
+//						currentLockIndex = 1;
+						break;
+					default:
+						break;
+				}
 				return true;
 			}
 		});
@@ -329,6 +374,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener {
 
 			byte[] command = MessageUtil.getOpData(currentLockIndex, index);
 			mBluetoothLeService.sendCommand(command);
+			currentLockIndex = index;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

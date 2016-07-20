@@ -15,6 +15,15 @@
         android:layout_height="180dp"
         android:layout_gravity="center"
         android:src="@drawable/lock_locked_button1"/>
+    <com.hookedonplay.decoviewlib.DecoView
+        android:id="@+id/dynamicArcView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+
+    </com.hookedonplay.decoviewlib.DecoView>
     <ImageView
         android:layout_width="160dp"
         android:layout_height="160dp"
@@ -36,7 +45,6 @@
         <com.armor.brelo.ui.custom.Stratum2BlackTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lock_icon"
             android:layout_centerHorizontal="true"
             android:textSize="20sp"
             android:textColor="@android:color/white"
