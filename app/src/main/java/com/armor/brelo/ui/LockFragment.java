@@ -24,6 +24,8 @@ import com.hookedonplay.decoviewlib.events.DecoEvent;
 public class LockFragment extends DecoAnimationFragment implements View.OnClickListener, View.OnLongClickListener{
     private int mSeries1Index;
     private int mPieIndex;
+    private int mSeries2Index;
+    private int mPie2Index;
     private int mLockIndex;
     private OnLockChangeListener lockChangeListener;
 
@@ -128,9 +130,23 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
                 getDecoView().getChartSeries(mPieIndex).reset();
             }
         };
+        final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
+            @Override
+            public void onEventStart(DecoEvent event) {
+            }
+
+            @Override
+            public void onEventEnd(DecoEvent event) {
+                getOuterDecoView().setVisibility(View.GONE);
+            }
+        };
         decoView.addEvent(new DecoEvent.Builder(100f)
                 .setIndex(mSeries1Index)
                 .setListener(eventListener)
+                .build());
+        getOuterDecoView().addEvent(new DecoEvent.Builder(0)
+                .setIndex(mSeries2Index)
+                .setListener(eventListener1)
                 .build());
     }
 
@@ -145,51 +161,70 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
                 getDecoView().getChartSeries(mPieIndex).reset();
             }
         };
+        final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
+            @Override
+            public void onEventStart(DecoEvent event) {
+            }
+
+            @Override
+            public void onEventEnd(DecoEvent event) {
+                getOuterDecoView().setVisibility(View.GONE);
+            }
+        };
         decoView.addEvent(new DecoEvent.Builder(100f)
                 .setIndex(mSeries1Index)
                 .setListener(eventListener)
+                .build());
+        getOuterDecoView().addEvent(new DecoEvent.Builder(0)
+                .setIndex(mSeries2Index)
+                .setListener(eventListener1)
                 .build());
     }
 
     @Override
     protected void createTracks() {
-        final DecoView decoView = getDecoView();
+        int innerSeriesItemColor = Color.parseColor("#ffffff");
+        if(mLockIndex == 2)
+            innerSeriesItemColor = getResources().getColor(R.color.white);
+        addSeries(innerSeriesItemColor);
+    }
+
+    private void addSeries(int innerSeriesItemColor) {
+        final DecoView innerDecoView = getDecoView();
+        final DecoView outerDecoView = getOuterDecoView();
         final View view = getView();
-        if (decoView == null || view == null) {
+        if (innerDecoView == null || view == null) {
             return;
         }
         view.setBackgroundColor(getResources().getColor(R.color.white));
 
-        decoView.executeReset();
-        decoView.deleteAll();
+        innerDecoView.executeReset();
+        innerDecoView.deleteAll();
 
         final float seriesMax = 100f;
 
         float circleInset = getDimension(18);
-        int seriesItemColor = Color.parseColor("#ffffff");
-        if(mLockIndex == 2)
-            seriesItemColor = Color.parseColor("#d4d4d4");
 
-        SeriesItem seriesBack1Item = new SeriesItem.Builder(seriesItemColor)
+        SeriesItem seriesBack1Item = new SeriesItem.Builder(innerSeriesItemColor)
                 .setRange(0, seriesMax, 0)
                 .setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
-                .setSpinDuration(1000)
+                .setSpinDuration(5000)
                 .setInset(new PointF(circleInset, circleInset))
                 .build();
 
-        mPieIndex = decoView.addSeries(seriesBack1Item);
+        mPieIndex = innerDecoView.addSeries(seriesBack1Item);
 
-        SeriesItem series1Item = new SeriesItem.Builder(seriesItemColor)
+        SeriesItem series1Item = new SeriesItem.Builder(innerSeriesItemColor)
                 .setRange(0, seriesMax, 0)
                 .setLineWidth(getDimension(36))
-                .setSpinDuration(1000)
+                .setSpinDuration(5000)
                 .setInterpolator(new LinearInterpolator())
                 .build();
 
         series1Item.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
-                decoView.getChartSeries(mPieIndex).setPosition(percentComplete < 1.0f ? percentComplete * seriesMax : 0f);
+                innerDecoView.getChartSeries(mPieIndex).setPosition(percentComplete < 1.0f ? percentComplete * seriesMax : 0f);
             }
 
             @Override
@@ -198,7 +233,38 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
             }
         });
 
-        mSeries1Index = decoView.addSeries(series1Item);
+        mSeries1Index = innerDecoView.addSeries(series1Item);
+
+
+        SeriesItem seriesBack2Item = new SeriesItem.Builder(innerSeriesItemColor)
+                .setRange(0, seriesMax, 100)
+                .setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
+                .setSpinDuration(5000)
+                .setInset(new PointF(circleInset, circleInset))
+                .build();
+
+        mPie2Index = outerDecoView.addSeries(seriesBack2Item);
+
+        SeriesItem series2Item = new SeriesItem.Builder(innerSeriesItemColor)
+                .setRange(0, seriesMax, 100)
+                .setLineWidth(getDimension(36))
+                .setSpinDuration(5000)
+                .setInterpolator(new LinearInterpolator())
+                .build();
+
+        series2Item.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
+            @Override
+            public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
+                outerDecoView.getChartSeries(mPieIndex).setPosition(percentComplete < 1.0f ? percentComplete * seriesMax : 0f);
+            }
+
+            @Override
+            public void onSeriesItemDisplayProgress(float percentComplete) {
+
+            }
+        });
+
+        mSeries2Index = outerDecoView.addSeries(series2Item);
 
     }
 }

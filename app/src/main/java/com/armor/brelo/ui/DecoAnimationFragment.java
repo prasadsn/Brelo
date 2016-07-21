@@ -163,6 +163,14 @@ abstract public class DecoAnimationFragment extends Fragment {
         }
         arcView.executeReset();
         arcView.deleteAll();
+
+        final DecoView outerArcView = getDecoView();
+
+        if (outerArcView == null || outerArcView.isEmpty()) {
+            return;
+        }
+        outerArcView.executeReset();
+        outerArcView.deleteAll();
     }
 
     @Override
@@ -194,6 +202,19 @@ abstract public class DecoAnimationFragment extends Fragment {
 
         try {
             return (DecoView) getView().findViewById(R.id.dynamicArcView);
+        } catch (NullPointerException npe) {
+            Log.e(TAG, "Unable to resolve view " + npe.getMessage());
+        }
+        return null;
+    }
+
+    protected DecoView getOuterDecoView() {
+        if (getView() == null) {
+            return null;
+        }
+
+        try {
+            return (DecoView) getView().findViewById(R.id.outerArcView);
         } catch (NullPointerException npe) {
             Log.e(TAG, "Unable to resolve view " + npe.getMessage());
         }

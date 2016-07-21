@@ -6,6 +6,10 @@
     android:id="@+id/btn_lock"
     android:elevation="20dp"
     android:orientation="vertical">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/lock_closed_button"/>
     <com.hookedonplay.decoviewlib.DecoView
         android:id="@+id/outerArcView"
         android:layout_width="match_parent"
@@ -16,11 +20,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
     <ImageView
-        android:layout_width="260dp"
-        android:layout_height="260dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_gravity="center"
         android:src="@drawable/lock_closed_button1"/>
     <LinearLayout
