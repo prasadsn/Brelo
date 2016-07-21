@@ -106,7 +106,7 @@ abstract public class DecoAnimationFragment extends Fragment {
         });
     }
 
-    private boolean createAnimation() {
+    protected boolean createAnimation() {
         if (mInitialized) {
             createTracks();
             if (super.getUserVisibleHint()) {

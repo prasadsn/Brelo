@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
-    android:layout_height="200dp"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
     android:layout_centerInParent="true"
     android:id="@+id/btn_lock"
     android:elevation="20dp"
     android:orientation="vertical">
-    <ImageView
+    <com.hookedonplay.decoviewlib.DecoView
+        android:id="@+id/outerArcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/lock_closed_button"/>
+        android:layout_alignParentBottom="true"/>
+    <com.hookedonplay.decoviewlib.DecoView
+        android:id="@+id/dynamicArcView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
     <ImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
         android:layout_gravity="center"
-        android:src="@drawable/lock_locked_button1"/>
-    <ImageView
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_gravity="center"
-        android:src="@drawable/lock_closed_button"/>
+        android:src="@drawable/lock_closed_button1"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +42,7 @@
             android:layout_below="@id/lock_icon"
             android:layout_centerHorizontal="true"
             android:textSize="20sp"
-            android:textColor="@android:color/white"
+            android:textColor="@color/tangerine"
             android:text="CLOSED"/>
     </LinearLayout>
 

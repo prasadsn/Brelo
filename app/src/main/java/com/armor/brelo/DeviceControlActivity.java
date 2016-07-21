@@ -245,10 +245,10 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 		return intentFilter;
 	}
 
-	private void sendUnlockCommand(int index) {
+	public void sendUnlockCommand(int index) {
 		try {
 			byte[] command = MessageUtil.getOpData(currentLockIndex, index);
-			mBluetoothLeService.sendCommand(command);
+//			mBluetoothLeService.sendCommand(command);
 			currentLockIndex = index;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -256,7 +256,37 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 	}
 
 	@Override
-	public void onLockChanged(int position) {
+	public void onLockClick() {
+		switch (currentLockIndex) {
+			case 1:
+				mLockFragment.updateLockUI(2);
+				sendUnlockCommand(2);
+//						currentLockIndex = 2;
+				break;
+			case 2:
+				mLockFragment.updateLockUI(3);
+				sendUnlockCommand(3);
+//						currentLockIndex = 3;
+				break;
+			case 3:
+//						updateLockUI(3);
+//						sendUnlockCommand(3);
+//						currentLockIndex = 3;
+				break;
+		}
+	}
 
+	@Override
+	public boolean onLockLongClick() {
+		switch (currentLockIndex) {
+			case 3:
+				mLockFragment.updateLockUI(1);
+				sendUnlockCommand(1);
+//						currentLockIndex = 1;
+				break;
+			default:
+				break;
+		}
+		return true;
 	}
 }

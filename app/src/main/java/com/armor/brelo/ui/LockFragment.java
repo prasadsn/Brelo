@@ -24,6 +24,7 @@ import com.hookedonplay.decoviewlib.events.DecoEvent;
 public class LockFragment extends DecoAnimationFragment implements View.OnClickListener, View.OnLongClickListener{
     private int mSeries1Index;
     private int mPieIndex;
+    private int mLockIndex;
     private OnLockChangeListener lockChangeListener;
 
     @Override
@@ -65,60 +66,24 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
-        final DecoEvent.ExecuteEventListener eventListener = new DecoEvent.ExecuteEventListener() {
-            @Override
-            public void onEventStart(DecoEvent event) {
-            }
-
-            @Override
-            public void onEventEnd(DecoEvent event) {
-                getDecoView().getChartSeries(mPieIndex).reset();
-            }
-        };
-        playLockAnimation(getDecoView(), eventListener);
     }
 
     @Override
     public void onClick(View v) {
-
-        switch (currentLockIndex) {
-            case 1:
-                updateLockUI(2);
-                sendUnlockCommand(2);
-//						currentLockIndex = 2;
-                break;
-            case 2:
-                updateLockUI(3);
-                sendUnlockCommand(3);
-//						currentLockIndex = 3;
-                break;
-            case 3:
-//						updateLockUI(3);
-//						sendUnlockCommand(3);
-//						currentLockIndex = 3;
-                break;
-        }
-
+        lockChangeListener.onLockClick();
     }
 
     @Override
     public boolean onLongClick(View v) {
-            switch (currentLockIndex) {
-                case 3:
-                    mLockFragment.updateLockUI(1);
-                    sendUnlockCommand(1);
-//						currentLockIndex = 1;
-                    break;
-                default:
-                    break;
-            }
-            return true;
-        }
+        return lockChangeListener.onLockLongClick();
+    }
 
     public interface OnLockChangeListener {
-        public void onLockChanged(int position);
+        void onLockClick();
+        boolean onLockLongClick();
     }
     public void updateLockUI(int lockStatus) {
+        mLockIndex = lockStatus;
         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.btn_lock);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getChildAt(0).getLayoutParams();
         layout.removeAllViews();
@@ -134,19 +99,52 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_closed, null);
                 view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
+                createAnimation();
+                playLatchAnimation(getDecoView());
+
 //				currentLockIndex = 2;
                 break;
             case 3:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_locked, null);
                 view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
+                createAnimation();
+                playLockAnimation(getDecoView());
+
 //				currentLockIndex = 3;
                 break;
         }
 
     }
 
-    private void playLockAnimation(DecoView decoView, DecoEvent.ExecuteEventListener eventListener) {
+    private void playLockAnimation(DecoView decoView) {
+        final DecoEvent.ExecuteEventListener eventListener = new DecoEvent.ExecuteEventListener() {
+            @Override
+            public void onEventStart(DecoEvent event) {
+            }
+
+            @Override
+            public void onEventEnd(DecoEvent event) {
+                getDecoView().getChartSeries(mPieIndex).reset();
+            }
+        };
+        decoView.addEvent(new DecoEvent.Builder(100f)
+                .setIndex(mSeries1Index)
+                .setListener(eventListener)
+                .build());
+    }
+
+    private void playLatchAnimation(DecoView decoView) {
+        final DecoEvent.ExecuteEventListener eventListener = new DecoEvent.ExecuteEventListener() {
+            @Override
+            public void onEventStart(DecoEvent event) {
+            }
+
+            @Override
+            public void onEventEnd(DecoEvent event) {
+                getDecoView().getChartSeries(mPieIndex).reset();
+            }
+        };
         decoView.addEvent(new DecoEvent.Builder(100f)
                 .setIndex(mSeries1Index)
                 .setListener(eventListener)
@@ -168,19 +166,23 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
         final float seriesMax = 100f;
 
         float circleInset = getDimension(18);
-        SeriesItem seriesBack1Item = new SeriesItem.Builder(Color.parseColor("#ffffff"))
+        int seriesItemColor = Color.parseColor("#ffffff");
+        if(mLockIndex == 2)
+            seriesItemColor = Color.parseColor("#d4d4d4");
+
+        SeriesItem seriesBack1Item = new SeriesItem.Builder(seriesItemColor)
                 .setRange(0, seriesMax, 0)
                 .setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
-                .setSpinDuration(2000)
+                .setSpinDuration(1000)
                 .setInset(new PointF(circleInset, circleInset))
                 .build();
 
         mPieIndex = decoView.addSeries(seriesBack1Item);
 
-        SeriesItem series1Item = new SeriesItem.Builder(Color.parseColor("#ffffff"))
+        SeriesItem series1Item = new SeriesItem.Builder(seriesItemColor)
                 .setRange(0, seriesMax, 0)
                 .setLineWidth(getDimension(36))
-                .setSpinDuration(2000)
+                .setSpinDuration(1000)
                 .setInterpolator(new LinearInterpolator())
                 .build();
 
