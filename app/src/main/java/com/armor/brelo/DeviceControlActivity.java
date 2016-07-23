@@ -136,7 +136,8 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 
 	protected void onStop() {
 		super.onStop();
-		mBluetoothLeService.disconnect();
+		if(mBluetoothLeService != null)
+			mBluetoothLeService.disconnect();
 	};
 
 	private void clearUI() {
@@ -248,7 +249,7 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 	public void sendUnlockCommand(int index) {
 		try {
 			byte[] command = MessageUtil.getOpData(currentLockIndex, index);
-//			mBluetoothLeService.sendCommand(command);
+			mBluetoothLeService.sendCommand(command);
 			currentLockIndex = index;
 		} catch (Exception e) {
 			e.printStackTrace();

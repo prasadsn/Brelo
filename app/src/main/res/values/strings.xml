@@ -49,4 +49,8 @@
     <string name="label_name_your_lock">NAME YOUR LOCK</string>
     <string name="label_add_time">Automatically lock the door during a certain time period</string>
     <string name="info_auto_unlock">Automatically unlocks the lock when you come in 2 meters range of the lock</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

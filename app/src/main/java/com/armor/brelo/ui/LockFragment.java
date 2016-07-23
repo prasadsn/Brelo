@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -27,7 +29,10 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
     private int mSeries2Index;
     private int mPie2Index;
     private int mLockIndex;
+    private View mLockNameIconLayout;
     private OnLockChangeListener lockChangeListener;
+    private Animation zoomout;
+    private Animation zoomin;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,8 +68,31 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
         View btnLock = getActivity().findViewById(R.id.btn_lock);
         btnLock.setOnClickListener(this);
         btnLock.setOnLongClickListener(this);
+        mLockNameIconLayout = getActivity().findViewById(R.id.lock_name_icon_layout);
+        zoomin = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_animation);
+        zoomout = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_out_animation);
+        zoomin.setAnimationListener(new ZoomInAnimationListener());
+        mLockNameIconLayout.setAnimation(zoomin);
+        mLockNameIconLayout.setAnimation(zoomout);
     }
 
+    private class ZoomInAnimationListener implements Animation.AnimationListener {
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            mLockNameIconLayout.startAnimation(zoomout);
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -95,11 +123,13 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_open, null);
                 //view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
+                createAnimation();
+                playOpenAnimation(getDecoView());
 //				currentLockIndex = 1;
                 break;
             case 2:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_closed, null);
-                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+//                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
                 createAnimation();
                 playLatchAnimation(getDecoView());
@@ -108,7 +138,7 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
                 break;
             case 3:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_locked, null);
-                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
+//                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
                 createAnimation();
                 playLockAnimation(getDecoView());
@@ -116,7 +146,7 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
 //				currentLockIndex = 3;
                 break;
         }
-
+        mLockNameIconLayout = getActivity().findViewById(R.id.lock_name_icon_layout);
     }
 
     private void playLockAnimation(DecoView decoView) {
@@ -128,6 +158,7 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
             @Override
             public void onEventEnd(DecoEvent event) {
                 getDecoView().getChartSeries(mPieIndex).reset();
+                mLockNameIconLayout.startAnimation(zoomin);
             }
         };
         final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
@@ -159,6 +190,39 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
             @Override
             public void onEventEnd(DecoEvent event) {
                 getDecoView().getChartSeries(mPieIndex).reset();
+                mLockNameIconLayout.startAnimation(zoomin);
+            }
+        };
+        final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
+            @Override
+            public void onEventStart(DecoEvent event) {
+            }
+
+            @Override
+            public void onEventEnd(DecoEvent event) {
+                getOuterDecoView().setVisibility(View.GONE);
+            }
+        };
+        decoView.addEvent(new DecoEvent.Builder(100f)
+                .setIndex(mSeries1Index)
+                .setListener(eventListener)
+                .build());
+        getOuterDecoView().addEvent(new DecoEvent.Builder(0)
+                .setIndex(mSeries2Index)
+                .setListener(eventListener1)
+                .build());
+    }
+
+    private void playOpenAnimation(DecoView decoView) {
+        final DecoEvent.ExecuteEventListener eventListener = new DecoEvent.ExecuteEventListener() {
+            @Override
+            public void onEventStart(DecoEvent event) {
+            }
+
+            @Override
+            public void onEventEnd(DecoEvent event) {
+                getDecoView().setVisibility(View.GONE);
+                mLockNameIconLayout.startAnimation(zoomin);
             }
         };
         final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
@@ -184,7 +248,7 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
     @Override
     protected void createTracks() {
         int innerSeriesItemColor = Color.parseColor("#ffffff");
-        if(mLockIndex == 2)
+//        if(mLockIndex == 2)
             innerSeriesItemColor = getResources().getColor(R.color.white);
         addSeries(innerSeriesItemColor);
     }
@@ -203,12 +267,12 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
 
         final float seriesMax = 100f;
 
-        float circleInset = getDimension(18);
+        float circleInset = getDimension(20);
 
         SeriesItem seriesBack1Item = new SeriesItem.Builder(innerSeriesItemColor)
                 .setRange(0, seriesMax, 0)
                 .setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
-                .setSpinDuration(5000)
+                .setSpinDuration(500)
                 .setInset(new PointF(circleInset, circleInset))
                 .build();
 
@@ -216,8 +280,8 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
 
         SeriesItem series1Item = new SeriesItem.Builder(innerSeriesItemColor)
                 .setRange(0, seriesMax, 0)
-                .setLineWidth(getDimension(36))
-                .setSpinDuration(5000)
+                .setLineWidth(getDimension(25))
+                .setSpinDuration(500)
                 .setInterpolator(new LinearInterpolator())
                 .build();
 
@@ -239,7 +303,7 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
         SeriesItem seriesBack2Item = new SeriesItem.Builder(innerSeriesItemColor)
                 .setRange(0, seriesMax, 100)
                 .setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
-                .setSpinDuration(5000)
+                .setSpinDuration(500)
                 .setInset(new PointF(circleInset, circleInset))
                 .build();
 
@@ -247,8 +311,8 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
 
         SeriesItem series2Item = new SeriesItem.Builder(innerSeriesItemColor)
                 .setRange(0, seriesMax, 100)
-                .setLineWidth(getDimension(36))
-                .setSpinDuration(5000)
+                .setLineWidth(getDimension(25))
+                .setSpinDuration(500)
                 .setInterpolator(new LinearInterpolator())
                 .build();
 

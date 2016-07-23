@@ -7,10 +7,36 @@
     android:elevation="50dp"
     android:background="@drawable/lock_open_button"
     android:orientation="vertical">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:src="@drawable/lock_locked_button"/>
+    <com.hookedonplay.decoviewlib.DecoView
+        android:id="@+id/outerArcView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        android:layout_alignParentBottom="true"/>
+    <com.hookedonplay.decoviewlib.DecoView
+        android:id="@+id/dynamicArcView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+    </com.hookedonplay.decoviewlib.DecoView>
+    <ImageView
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center"
+        android:src="@drawable/lock_open_button"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:id="@+id/lock_name_icon_layout"
         android:orientation="vertical">
         <ImageView
             android:layout_width="wrap_content"
