@@ -14,6 +14,10 @@ public class Lock extends RealmObject{
     private String macAddress;
     private int lockStatus;
 
+    public static final int LOCK_STATUS_OPEN = 1;
+    public static final int LOCK_STATUS_CLOSED = 2;
+    public static final int LOCK_STATUS_LOCKED = 3;
+
     public String getMacAddress() {
         return macAddress;
     }

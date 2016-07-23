@@ -39,7 +39,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
+import com.armor.brelo.db.model.Lock;
 import com.armor.brelo.ui.LockFragment;
+import com.armor.brelo.utils.ApplicationSettings;
 import com.armor.brelo.utils.MessageUtil;
 
 /**
@@ -64,7 +66,7 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 	private boolean mConnected = false;
 	private BluetoothGattCharacteristic mNotifyCharacteristic;
 
-	private int currentLockIndex = 3;
+	private int currentLockIndex = Lock.LOCK_STATUS_OPEN;
 	private static int DELAYui = 5000;					// 2000 milliseconds
 
 	private final String LIST_NAME = "NAME";
@@ -122,6 +124,7 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 			} else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
 				byte data = intent.getByteExtra(BluetoothLeService.EXTRA_DATA, (byte) 0);
 				Log.e(TAG, "Read characteristing data  " + data);
+				ApplicationSettings.BreloSharedPreferences.getInstance().putInt(ApplicationSettings.PREF_KEY_LOCK_STATUS, data, DeviceControlActivity.this);
 				currentLockIndex = data;
 				runOnUiThread(new Runnable() {
 					@Override
@@ -259,17 +262,17 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 	@Override
 	public void onLockClick() {
 		switch (currentLockIndex) {
-			case 1:
-				mLockFragment.updateLockUI(2);
-				sendUnlockCommand(2);
+			case Lock.LOCK_STATUS_OPEN:
+				mLockFragment.updateLockUI(Lock.LOCK_STATUS_CLOSED);
+				sendUnlockCommand(Lock.LOCK_STATUS_CLOSED);
 //						currentLockIndex = 2;
 				break;
-			case 2:
-				mLockFragment.updateLockUI(3);
-				sendUnlockCommand(3);
+			case Lock.LOCK_STATUS_CLOSED:
+				mLockFragment.updateLockUI(Lock.LOCK_STATUS_LOCKED);
+				sendUnlockCommand(Lock.LOCK_STATUS_LOCKED);
 //						currentLockIndex = 3;
 				break;
-			case 3:
+			case Lock.LOCK_STATUS_LOCKED:
 //						updateLockUI(3);
 //						sendUnlockCommand(3);
 //						currentLockIndex = 3;
@@ -280,9 +283,9 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 	@Override
 	public boolean onLockLongClick() {
 		switch (currentLockIndex) {
-			case 3:
-				mLockFragment.updateLockUI(1);
-				sendUnlockCommand(1);
+			case Lock.LOCK_STATUS_LOCKED:
+				mLockFragment.updateLockUI(Lock.LOCK_STATUS_OPEN);
+				sendUnlockCommand(Lock.LOCK_STATUS_OPEN);
 //						currentLockIndex = 1;
 				break;
 			default:

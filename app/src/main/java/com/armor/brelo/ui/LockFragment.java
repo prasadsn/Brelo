@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.armor.brelo.R;
+import com.armor.brelo.db.model.Lock;
+import com.armor.brelo.utils.ApplicationSettings;
 import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
@@ -74,6 +76,8 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
         zoomin.setAnimationListener(new ZoomInAnimationListener());
         mLockNameIconLayout.setAnimation(zoomin);
         mLockNameIconLayout.setAnimation(zoomout);
+//        int lockIndex = ApplicationSettings.BreloSharedPreferences.getInstance().getInt(ApplicationSettings.PREF_KEY_LOCK_STATUS, getActivity());
+//        updateLockUI(lockIndex);
     }
 
     private class ZoomInAnimationListener implements Animation.AnimationListener {
@@ -100,11 +104,13 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        v.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.lock_button_anim));
         lockChangeListener.onLockClick();
     }
 
     @Override
     public boolean onLongClick(View v) {
+        v.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.lock_button_anim));
         return lockChangeListener.onLockLongClick();
     }
 
@@ -113,13 +119,15 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
         boolean onLockLongClick();
     }
     public void updateLockUI(int lockStatus) {
+//        if(mLockIndex == lockStatus)
+//            return;
         mLockIndex = lockStatus;
         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.btn_lock);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getChildAt(0).getLayoutParams();
         layout.removeAllViews();
         View view = null;
         switch (lockStatus) {
-            case 1:
+            case Lock.LOCK_STATUS_OPEN:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_open, null);
                 //view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
@@ -127,7 +135,7 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
                 playOpenAnimation(getDecoView());
 //				currentLockIndex = 1;
                 break;
-            case 2:
+            case Lock.LOCK_STATUS_CLOSED:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_closed, null);
 //                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
@@ -136,7 +144,7 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
 
 //				currentLockIndex = 2;
                 break;
-            case 3:
+            case Lock.LOCK_STATUS_LOCKED:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_locked, null);
 //                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
