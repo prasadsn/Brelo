@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.armor.brelo.R;
 import com.armor.brelo.db.model.Lock;
+import com.armor.brelo.ui.custom.CustomCircleView;
 import com.armor.brelo.utils.ApplicationSettings;
 import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
@@ -166,6 +167,10 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
             @Override
             public void onEventEnd(DecoEvent event) {
                 getDecoView().getChartSeries(mPieIndex).reset();
+                CustomCircleView customCircleView = (CustomCircleView) getActivity().findViewById(R.id.inner_circle);
+                customCircleView.setRadius(115.5f);
+                customCircleView.setColor(getResources().getColor(R.color.lightblue));
+                customCircleView.startAnimation(1000);
                 mLockNameIconLayout.startAnimation(zoomin);
             }
         };
@@ -198,7 +203,11 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
             @Override
             public void onEventEnd(DecoEvent event) {
                 getDecoView().getChartSeries(mPieIndex).reset();
-                mLockNameIconLayout.startAnimation(zoomin);
+                CustomCircleView customCircleView = (CustomCircleView) getActivity().findViewById(R.id.inner_circle);
+                customCircleView.setRadius(115.5f);
+                customCircleView.setColor(Color.WHITE);
+                customCircleView.startAnimation(1000);
+//                mLockNameIconLayout.startAnimation(zoomin);
             }
         };
         final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
