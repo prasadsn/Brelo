@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
     <!-- larger circle at the back -->
-    <item android:height="254dp" android:width="254dp" android:gravity="center">
+    <item android:height="260dp" android:width="260dp" android:gravity="center">
         <shape
             android:shape="oval">
 

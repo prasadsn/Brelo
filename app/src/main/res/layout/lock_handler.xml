@@ -10,11 +10,21 @@
         android:id="@+id/btn_lock" />
 
     <com.armor.brelo.ui.custom.DINLTProRegularTextView
+        android:id="@+id/lock_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_lock"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="50dp"
         android:textSize="20sp"
         android:text="Home Lock"/>
+    <com.armor.brelo.ui.custom.DINLTProRegularTextView
+        android:id="@+id/lock_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_lock"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textSize="20sp"
+        android:text="Tap and hold to lock"/>
 </RelativeLayout>

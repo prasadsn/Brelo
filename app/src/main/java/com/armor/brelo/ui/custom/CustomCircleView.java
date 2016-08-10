@@ -17,6 +17,7 @@ import android.view.animation.LinearInterpolator;
  */
 public class CustomCircleView extends View {
 
+    private float height, width;
     private ObjectAnimator radiusAnimator;
     private float radius;
     private Paint circlePaint;
@@ -25,20 +26,26 @@ public class CustomCircleView extends View {
     public CustomCircleView(Context context) {
         super(context);
         circlePaint = new Paint();
+        width = context.getResources().getDisplayMetrics().widthPixels;
+        height = context.getResources().getDisplayMetrics().heightPixels;
     }
 
     public CustomCircleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         circlePaint = new Paint();
+        width = context.getResources().getDisplayMetrics().widthPixels;
+        height = context.getResources().getDisplayMetrics().heightPixels;
     }
 
     public CustomCircleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         circlePaint = new Paint();
+        width = context.getResources().getDisplayMetrics().widthPixels;
+        height = context.getResources().getDisplayMetrics().heightPixels;
     }
 
     public void setRadius(float value){
-        this.radius = value;
+        radius = value;
         invalidate();
     }
 
@@ -84,6 +91,6 @@ public class CustomCircleView extends View {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         circlePaint.setColor(color);
-        canvas.drawCircle(360, 360, radius, circlePaint);
+        canvas.drawCircle((getRight() - getLeft())/2, (getBottom() - getTop())/2, radius, circlePaint);
     }
 }

@@ -248,7 +248,7 @@ public class DeviceScanActivity extends ListActivity {
 		intent.putExtra("deviceName", deviceName);
 		intent.putExtra("deviceAddr", deviceAddr);
 		startActivity(intent);
-
+		finish();
 		/*SharedPreferences pref = getSharedPreferences(PREF_NAME_REG_DEVICES, MODE_PRIVATE);
 		String temp = pref.getString(deviceAddr, null);
 		if (temp == null) {
@@ -362,7 +362,7 @@ public class DeviceScanActivity extends ListActivity {
 			if (deviceName != null && deviceName.length() > 0 && (deviceName.contains("BRELO") || deviceName.contains("SOS")))
 				viewHolder.deviceName.setText(deviceName);
 			else
-				return null;
+				return view;
 			viewHolder.deviceAddress.setText(device.getAddress());
 
 			if (i == selectedIndex)

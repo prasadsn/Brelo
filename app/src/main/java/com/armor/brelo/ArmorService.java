@@ -159,7 +159,7 @@ public class ArmorService extends Service {
 			 */
 			boolean sos_enabled = preferences.getBoolean("sos", false);
 			auto_unlock_enabled = preferences.getBoolean("auto_unlock", false);
- 			if (deviceName.contains("SOS") && sos_enabled) {
+ 			if (deviceName!=null && deviceName.contains("SOS") && sos_enabled) {
 				if (!alarmActive) {
 					Intent intent = new Intent(ArmorService.this, AlarmActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -43,13 +43,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private DrawerLayout dLayout;
     private ListView mListView;
     private FloatingActionButton mAddLockFAB;
+    private TitlePageIndicator titleIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new LocksAdapter(getSupportFragmentManager()));
         setNavigationDrawer();
         mAddLockFAB = (FloatingActionButton) findViewById(R.id.btn_fab_add_lock);
         mAddLockFAB.setOnClickListener(new View.OnClickListener() {
@@ -60,12 +60,11 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 startActivity(intent);
             }
         });
-        TitlePageIndicator titleIndicator = (TitlePageIndicator)findViewById(R.id.titles);
+        titleIndicator = (TitlePageIndicator)findViewById(R.id.titles);
         titleIndicator.setTextColor(Color.BLACK);
         titleIndicator.setFooterLineHeight(0);
         titleIndicator.setSelectedColor(Color.BLACK);
         titleIndicator.setFooterIndicatorHeight(5);
-        titleIndicator.setViewPager(mPager);
         mAddLockFAB.setColorFilter(Color.WHITE);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,6 +83,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mListView.setAdapter(new NavigationMenuAdapter());
         mListView.setOnItemClickListener(this);
         mListView.setDivider(null);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPager.setAdapter(new LocksAdapter(getSupportFragmentManager()));
+        titleIndicator.setViewPager(mPager);
     }
 
     @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="300dp"
+    android:layout_width="240dp"
+    android:layout_height="240dp"
     android:layout_centerInParent="true"
     android:id="@+id/btn_lock"
     android:elevation="20dp"
@@ -9,6 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/outer_circle"
         android:src="@drawable/lock_closed_button"/>
     <com.hookedonplay.decoviewlib.DecoView
         android:id="@+id/outerArcView"
@@ -20,19 +21,21 @@
         android:id="@+id/dynamicArcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"/>
-    <ImageView
-        android:layout_width="231dp"
-        android:layout_height="231dp"
+    <com.armor.brelo.ui.custom.CustomCircleView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:visibility="gone"
+        android:id="@+id/middle_circle"
         android:src="@drawable/lock_closed_button1"/>
     <com.armor.brelo.ui.custom.CustomCircleView
         android:id="@+id/inner_circle"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:background="@drawable/shadow_white_button"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"/>
     <LinearLayout
         android:layout_width="wrap_content"

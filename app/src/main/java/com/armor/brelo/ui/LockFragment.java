@@ -1,10 +1,15 @@
 package com.armor.brelo.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.armor.brelo.R;
 import com.armor.brelo.db.model.Lock;
@@ -122,11 +128,13 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
     public void updateLockUI(int lockStatus) {
 //        if(mLockIndex == lockStatus)
 //            return;
+        TextView lockHint = (TextView) getActivity().findViewById(R.id.lock_hint);
         mLockIndex = lockStatus;
         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.btn_lock);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getChildAt(0).getLayoutParams();
         layout.removeAllViews();
         View view = null;
+        CustomCircleView customCircleView = null;
         switch (lockStatus) {
             case Lock.LOCK_STATUS_OPEN:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_open, null);
@@ -134,14 +142,21 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
                 layout.addView(view, params);
                 createAnimation();
                 playOpenAnimation(getDecoView());
+                lockHint.setVisibility(View.GONE);
+                lockHint.setText("Tap and hold to lock");
 //				currentLockIndex = 1;
                 break;
             case Lock.LOCK_STATUS_CLOSED:
                 view = getActivity().getLayoutInflater().inflate(R.layout.lock_closed, null);
 //                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
-                createAnimation();
-                playLatchAnimation(getDecoView());
+//                playShadeAnimation(getActivity().findViewById(R.id.inner_circle));
+                playShadeAnimation(getActivity().findViewById(R.id.outer_circle));
+                lockHint.setVisibility(View.VISIBLE);
+                lockHint.setText("Tap and hold to lock");
+//                getActivity().findViewById(R.id.middle_circle).setVisibility(View.VISIBLE);
+//                createAnimation();
+//                playLatchAnimation(getDecoView());
 
 //				currentLockIndex = 2;
                 break;
@@ -150,7 +165,12 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
 //                view.setBackground((Drawable) getResources().getDrawable(R.drawable.lock_locked_button));
                 layout.addView(view, params);
                 createAnimation();
-                playLockAnimation(getDecoView());
+//                playShadeAnimation(getActivity().findViewById(R.id.inner_circle));
+                playShadeAnimation(getActivity().findViewById(R.id.outer_circle));
+                lockHint.setVisibility(View.VISIBLE);
+                lockHint.setText("Tap and hold to open");
+//                mLockNameIconLayout.startAnimation(zoomin);
+//                playLockAnimation(getDecoView());
 
 //				currentLockIndex = 3;
                 break;
@@ -158,76 +178,41 @@ public class LockFragment extends DecoAnimationFragment implements View.OnClickL
         mLockNameIconLayout = getActivity().findViewById(R.id.lock_name_icon_layout);
     }
 
-    private void playLockAnimation(DecoView decoView) {
-        final DecoEvent.ExecuteEventListener eventListener = new DecoEvent.ExecuteEventListener() {
+    private void playShadeAnimation(View view) {
+        // Custom animation on image
+
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(view, "alpha",  1f, .3f);
+        fadeOut.setDuration(2000);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(view, "alpha", .01f, 1f);
+        fadeIn.setDuration(3000);
+
+        final AnimatorSet mAnimationSet = new AnimatorSet();
+
+        mAnimationSet.play(fadeIn);
+
+        mAnimationSet.addListener(new AnimatorListenerAdapter() {
+
             @Override
-            public void onEventStart(DecoEvent event) {
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                CustomCircleView customCircleView = (CustomCircleView) getActivity().findViewById(R.id.middle_circle);
+                if(customCircleView == null)
+                    return;
+                customCircleView.setVisibility(View.VISIBLE);
+                customCircleView.setRadius(390.5f);
+                if(mLockIndex == Lock.LOCK_STATUS_CLOSED)
+                    customCircleView.setColor(Color.WHITE);
+                else
+                    customCircleView.setColor(getResources().getColor(R.color.lightblue));
+                customCircleView.startAnimation(2000);
             }
 
             @Override
-            public void onEventEnd(DecoEvent event) {
-                getDecoView().getChartSeries(mPieIndex).reset();
-                CustomCircleView customCircleView = (CustomCircleView) getActivity().findViewById(R.id.inner_circle);
-                customCircleView.setRadius(115.5f);
-                customCircleView.setColor(getResources().getColor(R.color.lightblue));
-                customCircleView.startAnimation(1000);
-                mLockNameIconLayout.startAnimation(zoomin);
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
             }
-        };
-        final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
-            @Override
-            public void onEventStart(DecoEvent event) {
-            }
-
-            @Override
-            public void onEventEnd(DecoEvent event) {
-                getOuterDecoView().setVisibility(View.GONE);
-            }
-        };
-        decoView.addEvent(new DecoEvent.Builder(100f)
-                .setIndex(mSeries1Index)
-                .setListener(eventListener)
-                .build());
-        getOuterDecoView().addEvent(new DecoEvent.Builder(0)
-                .setIndex(mSeries2Index)
-                .setListener(eventListener1)
-                .build());
-    }
-
-    private void playLatchAnimation(DecoView decoView) {
-        final DecoEvent.ExecuteEventListener eventListener = new DecoEvent.ExecuteEventListener() {
-            @Override
-            public void onEventStart(DecoEvent event) {
-            }
-
-            @Override
-            public void onEventEnd(DecoEvent event) {
-                getDecoView().getChartSeries(mPieIndex).reset();
-                CustomCircleView customCircleView = (CustomCircleView) getActivity().findViewById(R.id.inner_circle);
-                customCircleView.setRadius(115.5f);
-                customCircleView.setColor(Color.WHITE);
-                customCircleView.startAnimation(1000);
-//                mLockNameIconLayout.startAnimation(zoomin);
-            }
-        };
-        final DecoEvent.ExecuteEventListener eventListener1 = new DecoEvent.ExecuteEventListener() {
-            @Override
-            public void onEventStart(DecoEvent event) {
-            }
-
-            @Override
-            public void onEventEnd(DecoEvent event) {
-                getOuterDecoView().setVisibility(View.GONE);
-            }
-        };
-        decoView.addEvent(new DecoEvent.Builder(100f)
-                .setIndex(mSeries1Index)
-                .setListener(eventListener)
-                .build());
-        getOuterDecoView().addEvent(new DecoEvent.Builder(0)
-                .setIndex(mSeries2Index)
-                .setListener(eventListener1)
-                .build());
+        });
+        mAnimationSet.start();
     }
 
     private void playOpenAnimation(DecoView decoView) {

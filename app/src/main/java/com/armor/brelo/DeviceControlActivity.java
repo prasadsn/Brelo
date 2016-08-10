@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.armor.brelo.db.model.Lock;
 import com.armor.brelo.ui.LockFragment;
@@ -163,6 +164,7 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 			ArmorService.isNotificationActive = false;
 //		getActionBar().setTitle(mDeviceName);
 //		getActionBar().setDisplayHomeAsUpEnabled(true);
+		((TextView)findViewById(R.id.lock_name)).setText(mDeviceName);
 		mLockFragment.updateLockUI(currentLockIndex);
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
 		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);

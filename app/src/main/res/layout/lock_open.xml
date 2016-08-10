@@ -5,24 +5,24 @@
     android:layout_centerInParent="true"
     android:id="@+id/btn_lock"
     android:elevation="50dp"
-    android:background="@drawable/lock_open_button"
     android:orientation="vertical">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:src="@drawable/lock_locked_button"/>
+        android:src="@drawable/shadow_white_button"/>
     <com.hookedonplay.decoviewlib.DecoView
         android:id="@+id/outerArcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="10dp"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"/>
     <com.hookedonplay.decoviewlib.DecoView
         android:id="@+id/dynamicArcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
+        android:visibility="gone"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
@@ -31,6 +31,7 @@
         android:layout_width="220dp"
         android:layout_height="220dp"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:src="@drawable/lock_open_button"/>
     <LinearLayout
         android:layout_width="wrap_content"
