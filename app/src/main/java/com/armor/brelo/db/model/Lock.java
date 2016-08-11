@@ -13,6 +13,7 @@ public class Lock extends RealmObject{
     private boolean autoUnlockEnabled;
     private String macAddress;
     private int lockStatus;
+    private boolean inProximity;
 
     public static final int LOCK_STATUS_OPEN = 1;
     public static final int LOCK_STATUS_CLOSED = 2;
@@ -71,5 +72,13 @@ public class Lock extends RealmObject{
 
     public void setLockStatus(int lockStatus) {
         this.lockStatus = lockStatus;
+    }
+
+    public boolean isInProximity() {
+        return inProximity;
+    }
+
+    public void setInProximity(boolean inProximity) {
+        this.inProximity = inProximity;
     }
 }

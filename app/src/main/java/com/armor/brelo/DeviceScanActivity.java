@@ -44,6 +44,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.armor.brelo.controller.LockManager;
+import com.armor.brelo.db.model.Lock;
 import com.armor.brelo.ui.AddLockActivity;
 
 /**
@@ -244,6 +246,12 @@ public class DeviceScanActivity extends ListActivity {
 		BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
 		String deviceName = device.getName();
 		String deviceAddr = device.getAddress();
+		Lock lock = LockManager.getLock(deviceAddr);
+		if(lock != null) {
+			Toast toast = Toast.makeText(DeviceScanActivity.this, "The " + deviceName + " is already added", Toast.LENGTH_LONG);
+			toast.show();
+			return;
+		}
 		Intent intent = new Intent(DeviceScanActivity.this, AddLockActivity.class);
 		intent.putExtra("deviceName", deviceName);
 		intent.putExtra("deviceAddr", deviceAddr);
@@ -359,7 +367,7 @@ public class DeviceScanActivity extends ListActivity {
 				if (temp != null)
 					deviceName = temp;
 			}
-			if (deviceName != null && deviceName.length() > 0 && (deviceName.contains("BRELO") || deviceName.contains("SOS")))
+			if (deviceName != null && deviceName.length() > 0 && (deviceName.contains(BreloApplication.BLE_DEVICE_NAME) || deviceName.contains("SOS")))
 				viewHolder.deviceName.setText(deviceName);
 			else
 				return view;

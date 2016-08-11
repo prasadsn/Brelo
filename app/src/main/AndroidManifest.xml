@@ -1,94 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.armor.brelo">
+package="com.armor.brelo">
 
-    <uses-sdk
-        android:minSdkVersion="18"
-        android:targetSdkVersion="18" />
+<uses-sdk android:minSdkVersion="18" android:targetSdkVersion="18" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+<uses-permission android:name="android.permission.GET_TASKS" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
+<uses-feature android:name="android.hardware.camera" android:required="true" />
 
-    <provider
-        android:name="android.support.v4.content.FileProvider"
-        android:authorities="com.armor.brelo.fileprovider"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/file_paths" />
-    </provider>
+<provider android:name="android.support.v4.content.FileProvider" android:authorities="com.armor.brelo.fileprovider"
+    android:exported="false" android:grantUriPermissions="true">
+    <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+</provider>
 
-    <application
-        android:name=".BreloApplication"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
+<application android:name=".BreloApplication" android:icon="@drawable/ic_launcher" android:label="@string/app_name"
+    android:theme="@style/AppTheme">
+    <activity android:name=".DeviceScanActivity" android:label="@string/app_name">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+            <user-permission android:name="android.intent.action.BOOT_COMPLETED" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".DeviceControlActivity" />
+    <activity android:name=".SettingsActivity" />
+    <activity android:name=".AlarmActivity" android:theme="@android:style/Animation.Dialog" />
+
+    <service android:name=".BluetoothLeService" android:enabled="true" />
+
+    <receiver android:name=".DeviceBooted">
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+        </intent-filter>
+    </receiver>
+
+    <service android:name=".ArmorService" android:enabled="true" />
+
+    <activity android:name=".ui.SignUpActivity" android:label="@string/app_name">
+    </activity>
+    <activity android:name=".ui.MainActivity" android:label="@string/title_activity_main" />
+    <activity android:name=".ui.AddLockActivity" android:label="@string/title_activity_add_lock"
+        android:theme="@style/AppTheme" />
+    <activity android:name="com.armor.brelo.ui.SplashActivity" android:label="@string/title_activity_splash"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".DeviceScanActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-                <user-permission android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".DeviceControlActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity
-            android:name=".AlarmActivity"
-            android:theme="@android:style/Animation.Dialog" />
-
-        <service
-            android:name=".BluetoothLeService"
-            android:enabled="true" />
-
-        <receiver android:name=".DeviceBooted">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".ArmorService"
-            android:enabled="true" />
-
-        <activity
-            android:name=".ui.SignUpActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main" />
-        <activity
-            android:name=".ui.AddLockActivity"
-            android:label="@string/title_activity_add_lock"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.SplashActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme"></activity>
-    </application>
-
-</manifest>
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
+    </manifest>

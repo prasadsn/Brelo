@@ -9,6 +9,8 @@ import io.realm.RealmConfiguration;
  * Created by prsn0001 on 6/30/2016.
  */
 public class BreloApplication extends Application {
+
+    public static final String BLE_DEVICE_NAME = "BRELO";
     @Override
     public void onCreate() {
         super.onCreate();
