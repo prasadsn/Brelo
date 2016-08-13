@@ -3,6 +3,7 @@ package com.armor.brelo.ui;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,6 +30,8 @@ import com.armor.brelo.utils.ApplicationSettings;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 public class SplashActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -42,12 +45,16 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        Realm.getDefaultInstance().beginTransaction();
         List<Lock> locks = LockManager.getAllLocks();
         for (Lock lock : locks) {
             lock.setInProximity(false);
         }
         LockManager.updateLocks(locks);
+        Realm.getDefaultInstance().commitTransaction();
         mHandler = new Handler();
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
         scanLeDevice();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -62,13 +69,19 @@ public class SplashActivity extends AppCompatActivity {
                     bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
                 }
             }
-        }, 4000);
+        }, 5000);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mGattUpdateReceiver);
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -81,7 +94,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void scanLeDevice() {
-        mBluetoothAdapter.startLeScan(mLeScanCallback);
+        boolean flag = mBluetoothAdapter.startLeScan(mLeScanCallback);
+        Log.d(TAG, "Scan successful status : " + flag);
     }
 
     private void stopScan() {
@@ -97,7 +111,8 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     String deviceName = device.getName();
                     String deviceAddress = device.getAddress();
-                    if(deviceName.equals(BreloApplication.BLE_DEVICE_NAME))
+                    Lock lock = LockManager.getLock(deviceAddress);
+                    if(lock != null && !mAddressList.contains(deviceAddress))
                         mAddressList.add(deviceAddress);
                 }
             });
@@ -149,13 +164,20 @@ public class SplashActivity extends AppCompatActivity {
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 byte data = intent.getByteExtra(BluetoothLeService.EXTRA_DATA, (byte) 0);
                 Log.e(TAG, "Read characteristing data  " + data);
+                Realm.getDefaultInstance().beginTransaction();
                 Lock lock = LockManager.getLock(mAddressList.get(0));
                 lock.setInProximity(true);
                 lock.setLockStatus(data);
                 LockManager.updateLock(lock);
+                Realm.getDefaultInstance().commitTransaction();
                 mAddressList.remove(0);
                 mBluetoothLeService.disconnect();
                 unbindService(mServiceConnection);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 if(mAddressList.size() == 0) {
                     Intent intent1 = new Intent(SplashActivity.this, SignUpActivity.class);
                     startActivity(intent1);
@@ -171,13 +193,9 @@ public class SplashActivity extends AppCompatActivity {
 
     protected void onStop() {
         super.onStop();
-        if(mBluetoothLeService != null)
-            mBluetoothLeService.disconnect();
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
-        mBluetoothLeService = null;
     }
 }

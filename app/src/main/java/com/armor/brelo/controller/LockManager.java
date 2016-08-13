@@ -44,13 +44,9 @@ public class LockManager {
     }
 
     public static void updateLock(Lock lock) {
-        Realm.getDefaultInstance().beginTransaction();
         Realm.getDefaultInstance().copyToRealmOrUpdate(lock);
-        Realm.getDefaultInstance().commitTransaction();
     }
     public static void updateLocks(List<Lock> locks) {
-        Realm.getDefaultInstance().beginTransaction();
         Realm.getDefaultInstance().copyToRealmOrUpdate(locks);
-        Realm.getDefaultInstance().commitTransaction();
     }
 }

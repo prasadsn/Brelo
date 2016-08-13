@@ -4,6 +4,10 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.armor.brelo.R;
 
 /**
  * Created by prsn0001 on 7/4/2016.
@@ -56,5 +60,6 @@ public class RecyclerViewEmptySupport extends RecyclerView {
 
     public void setEmptyView(View emptyView) {
         this.emptyView = emptyView;
+//        ((ImageView)((LinearLayout) this.emptyView).getChildAt(0)).setColorFilter(getResources().getColor(R.color.light_gray));
     }
 }

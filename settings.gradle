@@ -1,2 +1,2 @@
-include ':app', ':decoviewlib'
+include ':app', ':decoviewlib', ':PhotoCropper'
 include ':library'

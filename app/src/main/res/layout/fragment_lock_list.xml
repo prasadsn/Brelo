@@ -8,12 +8,27 @@
         android:id="@+id/locks_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <ImageView
+    <LinearLayout
         android:id="@+id/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/locks"
-        android:foregroundGravity="center"
-        android:visibility="gone"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/locks"/>
+        <com.armor.brelo.ui.custom.BreloButton
+            android:id="@+id/btn_add_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/btn_add_lock"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
 </RelativeLayout>

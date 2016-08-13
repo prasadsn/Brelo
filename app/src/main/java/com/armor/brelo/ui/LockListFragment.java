@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -64,7 +65,7 @@ public abstract class LockListFragment extends Fragment {
         mRecyclerView.setEmptyView(layout.findViewById(R.id.empty_view));
         mRecyclerView.setAdapter(new LocksAdapter(getLockList(), lockType));
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(10));
-        layout.findViewById(R.id.empty_view).setOnClickListener(new View.OnClickListener() {
+        ((LinearLayout)layout.findViewById(R.id.empty_view)).getChildAt(1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DeviceScanActivity.class);
@@ -94,6 +95,15 @@ public abstract class LockListFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(getLockList().size() == 0)
+            getActivity().findViewById(R.id.btn_fab_add_lock).setVisibility(View.GONE);
+        else
+            getActivity().findViewById(R.id.btn_fab_add_lock).setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
     }
@@ -119,10 +129,24 @@ public abstract class LockListFragment extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
                 holder.mLockName.setText(mListLock.get(position).getLockName());
 //                holder.mLockStatus.setText(mListLock.get(position).getmLockStatus());
-                holder.mLockIcon.setImageResource(R.drawable.closed);
+                switch (mListLock.get(position).getLockStatus()) {
+                    case Lock.LOCK_STATUS_OPEN:
+                        holder.mLockIcon.setImageResource(R.drawable.open);
+                        holder.mLockIcon.setBackgroundColor(getResources().getColor(R.color.white));
+                        holder.mLockStatus.setText("OPEN");
+                        break;
+                    case Lock.LOCK_STATUS_CLOSED:
+                        holder.mLockIcon.setImageResource(R.drawable.closed);
+                        holder.mLockIcon.setBackgroundColor(getResources().getColor(R.color.white));
+                        holder.mLockStatus.setText("CLOSED");
+                        break;
+                    case Lock.LOCK_STATUS_LOCKED:
+                        holder.mLockIcon.setImageResource(R.drawable.locked1);
+                        holder.mLockIcon.setBackgroundColor(getResources().getColor(R.color.lightblue));
+                        holder.mLockStatus.setText("LOCKED");
+                        break;
+                }
                 holder.mLockMacAddress = mListLock.get(position).getMacAddress();
-//                if(!(mListLock.get(position).getmLockStatus() == Lock.LOCK_STATUS.CLOSED.ordinal()))
-                    holder.mLockIcon.setImageResource(R.drawable.open);
         }
 
         @Override

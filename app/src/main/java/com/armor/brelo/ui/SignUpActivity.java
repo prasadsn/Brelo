@@ -1,8 +1,10 @@
 package com.armor.brelo.ui;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -15,7 +17,9 @@ import android.app.Activity;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v4.graphics.BitmapCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -29,7 +33,13 @@ import com.armor.brelo.R;
 import com.armor.brelo.controller.AuthenticationManager;
 import com.armor.brelo.db.model.User;
 
+import org.hybridsquad.android.library.BitmapUtil;
+import org.hybridsquad.android.library.CropHandler;
+import org.hybridsquad.android.library.CropHelper;
+import org.hybridsquad.android.library.CropParams;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,8 +47,9 @@ import java.util.Date;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class SignUpActivity extends Activity implements View.OnClickListener{
+public class SignUpActivity extends Activity  implements CropHandler, View.OnClickListener{
 
+    private static final String TAG = "SignUpActivity";
     TextView signInTabButton;
     Button signUpTabButton;
     Button signInButton;
@@ -47,6 +58,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_CROP = 2;
     private EditText signInUserName, signInPassword, signUpFullname, signUpEmail, signUpPhoneNumber, signUpPassword;
+    CropParams mCropParams;
+    Bitmap profilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +82,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
             signInUserName.setText(users.get(0).getEmail());
             signInPassword.setText(users.get(0).getPassword());
         }
+        mCropParams = new CropParams(this);
     }
 
     @Override
@@ -140,6 +154,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
                         toast.show();
                         return;
                     }
+                    saveImage(SignUpActivity.this, profilePic, fullName.toString().replaceAll(" ", "_"), "jpg");
                     AuthenticationManager.addUser(fullName.toString(), email.toString(), phoneNumber.toString(), password.toString());
                     Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -148,7 +163,12 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
                 });
                 break;
             case R.id.take_picture_icon:
-                dispatchTakePictureIntent();
+                mCropParams.enable = true;
+                mCropParams.compress = true;
+                Intent intent = CropHelper.buildCameraIntent(mCropParams);
+                startActivityForResult(intent, CropHelper.REQUEST_CAMERA);
+
+//                dispatchTakePictureIntent();
                 break;
         }
     }
@@ -162,8 +182,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        CropHelper.handleResult(this, requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        /*if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
             performCrop(data.getData());
 
@@ -174,9 +195,21 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
             takePictureIcon.setImageBitmap(imageBitmap);
             takePictureIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             takePictureIcon.setBackgroundResource(0);
+        }*/
+    }
 
+    public void saveImage(Context context, Bitmap b, String name, String extension){
+        name = name + "." + extension;
+        FileOutputStream out;
+        try {
+            out = context.openFileOutput(name, Context.MODE_PRIVATE);
+            b.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
     private void performCrop(Uri picUri) {
         // take care of exceptions
         try {
@@ -270,5 +303,48 @@ public class SignUpActivity extends Activity implements View.OnClickListener{
         icon.setVisibility(View.VISIBLE);
         takePictureIcon.setVisibility(View.GONE);
         signInButton.setText("SING IN");
+    }
+
+    @Override
+    public CropParams getCropParams() {
+        return mCropParams;
+    }
+
+    @Override
+    public void onPhotoCropped(Uri uri) {
+        // Original or Cropped uri
+        Log.d(TAG, "Crop Uri in path: " + uri.getPath());
+        if (!mCropParams.compress) {
+            profilePic = BitmapUtil.decodeUriAsBitmap(this, uri);
+            takePictureIcon.setImageBitmap(profilePic);
+        }
+    }
+
+    @Override
+    public void onCompressed(Uri uri) {
+        // Compressed uri
+        profilePic = BitmapUtil.decodeUriAsBitmap(this, uri);
+        takePictureIcon.setImageBitmap(profilePic);
+    }
+
+    @Override
+    public void onCancel() {
+        Toast.makeText(this, "Crop canceled!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFailed(String message) {
+        Toast.makeText(this, "Crop failed: " + message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void handleIntent(Intent intent, int requestCode) {
+        startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CropHelper.clearCacheDir();
     }
 }

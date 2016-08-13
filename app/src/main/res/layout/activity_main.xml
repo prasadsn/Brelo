@@ -65,24 +65,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="100dp"
                 android:layout_marginLeft="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:background="@android:color/white"
                 android:orientation="horizontal">
                 <com.armor.brelo.ui.custom.RoundedImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:id="@+id/nav_dr_user_pic"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_gravity="center_vertical"
                     android:foregroundGravity="center_vertical"
                     android:src="@drawable/add"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:foregroundGravity="center_vertical"
                     android:layout_marginLeft="16dp"
                     android:orientation="vertical">
-                    <TextView
+                    <com.armor.brelo.ui.custom.DINLTProRegularTextView
+                        android:id="@+id/nav_dr_user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@android:color/black"
                         android:text="Prasad"/>
-                    <TextView
+                    <com.armor.brelo.ui.custom.DINLTProRegularTextView
+                        android:id="@+id/nav_dr_user_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="prasadessen@gmail.com"/>
@@ -109,19 +118,21 @@
                     android:layout_marginBottom="16dp"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:foregroundGravity="center_vertical"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/log_out"/>
-                    <TextView
+                    <com.armor.brelo.ui.custom.DINLTProRegularTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:foregroundGravity="center_vertical"
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="16dp"
-                        android:text="LOG OUT"/>
+                        android:layout_marginLeft="46dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="16dp"
+                        android:text="Log Out"/>
                 </LinearLayout>
         </LinearLayout>
     </android.support.design.widget.NavigationView>

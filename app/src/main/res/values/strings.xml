@@ -55,4 +55,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_">Activity</string>
     <string name="title_activity_splash">SplashActivity</string>
+
+    <string name="btn_add_lock">ADD A NEW LOCK</string>
 </resources>

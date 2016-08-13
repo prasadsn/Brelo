@@ -1,6 +1,9 @@
 package com.armor.brelo.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -31,9 +34,16 @@ import android.widget.Toast;
 import com.armor.brelo.DeviceScanActivity;
 import com.armor.brelo.R;
 import com.armor.brelo.SettingsActivity;
+import com.armor.brelo.db.model.User;
+import com.armor.brelo.ui.custom.RoundedImageView;
 import com.viewpagerindicator.IconPageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.UnderlinePageIndicator;
+
+import java.io.FileInputStream;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
 
@@ -83,6 +93,26 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mListView.setAdapter(new NavigationMenuAdapter());
         mListView.setOnItemClickListener(this);
         mListView.setDivider(null);
+
+        RealmResults<User> users = Realm.getDefaultInstance().where(User.class).findAll();
+        ((TextView) findViewById(R.id.nav_dr_user_name)).setText(users.get(0).getFullName());
+        ((TextView) findViewById(R.id.nav_dr_user_email)).setText(users.get(0).getEmail());
+        Bitmap profile_pic = getImageBitmap(this, users.get(0).getFullName().replaceAll(" ", "_"), "jpg");
+        if(profile_pic != null)
+            ((RoundedImageView) findViewById(R.id.nav_dr_user_pic)).setImageBitmap(profile_pic);
+    }
+
+    public Bitmap getImageBitmap(Context context, String name, String extension){
+        name = name + "." + extension;
+        try{
+            FileInputStream fis = context.openFileInput(name);
+            Bitmap b = BitmapFactory.decodeStream(fis);
+            fis.close();
+            return b;
+        }
+        catch(Exception e){
+        }
+        return null;
     }
 
     @Override
@@ -152,10 +182,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             TextView title = (TextView) convertView.findViewById(R.id.title);
             if(position == 0) {
                 icon.setImageResource(R.drawable.locks);
-                title.setText("LOCKS");
+                title.setText("Locks");
+                title.setTextColor(getResources().getColor(R.color.lightblue));
             } else {
                 icon.setImageResource(R.drawable.settings);
-                title.setText("SETTINGS");
+//                icon.setColorFilter(getResources().getColor(R.color.lightblue));
+                title.setText("Settings");
             }
             return convertView;
         }

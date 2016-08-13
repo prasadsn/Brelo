@@ -1,11 +1,15 @@
 package com.armor.brelo.db.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by prsn0001 on 6/30/2016.
  */
-public class Lock extends RealmObject{
+public class Lock extends RealmObject {
+
+    @PrimaryKey
+    private long _id;
     private String lockName;
     private boolean nightModeEnabled;
     private String fromDate;
@@ -18,6 +22,14 @@ public class Lock extends RealmObject{
     public static final int LOCK_STATUS_OPEN = 1;
     public static final int LOCK_STATUS_CLOSED = 2;
     public static final int LOCK_STATUS_LOCKED = 3;
+
+    public long get_id() {
+        return _id;
+    }
+
+    public void set_id(long _id) {
+        this._id = _id;
+    }
 
     public String getMacAddress() {
         return macAddress;
