@@ -112,7 +112,7 @@ public class SplashActivity extends AppCompatActivity {
                     String deviceName = device.getName();
                     String deviceAddress = device.getAddress();
                     Lock lock = LockManager.getLock(deviceAddress);
-                    if(lock != null && !mAddressList.contains(deviceAddress))
+                    if(lock != null && !mAddressList.contains(deviceAddress) && !deviceName.equals("SOS"))
                         mAddressList.add(deviceAddress);
                 }
             });

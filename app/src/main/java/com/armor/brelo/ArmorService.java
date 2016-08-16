@@ -20,10 +20,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.RemoteViews;
+
+import com.armor.brelo.ui.MainActivity;
+import com.armor.brelo.ui.SplashActivity;
 
 public class ArmorService extends Service {
 
@@ -42,6 +47,7 @@ public class ArmorService extends Service {
 	private String deviceName = null;
 	private String deviceAddress = null;
 	public static final int NOTIFICATION_ID = 32123;
+	public static final int NOTIFICATION_ID_SOS = 32124;
 	public static boolean isNotificationActive = false;
 	private boolean isDeviceReady = true;
 	private File logFile;
@@ -160,13 +166,14 @@ public class ArmorService extends Service {
 			boolean sos_enabled = preferences.getBoolean("sos", false);
 			auto_unlock_enabled = preferences.getBoolean("auto_unlock", false);
  			if (deviceName!=null && deviceName.contains("SOS") && sos_enabled) {
-				if (!alarmActive) {
+//				if (!alarmActive) {
 					Intent intent = new Intent(ArmorService.this, AlarmActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					getApplication().startActivity(intent);
-					// showSOSNotification();
+					 showSOSNotification();
+//				showManualNotification();
 					alarmActive = !alarmActive;
-				}
+//				}
 			} else if (distance < DISTANCE_THRESHOLD && auto_unlock_enabled && device.getBondState() == BluetoothDevice.BOND_NONE
 					&& isDeviceOutOfRange){
 				try {
@@ -293,26 +300,44 @@ public class ArmorService extends Service {
 		resultIntent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, deviceAddress);
 		resultIntent.putExtra("NOTIFICATION", true);
 
-		// The stack builder object will contain an artificial back stack for
-		// the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-		// Adds the back stack for the Intent (but not the Intent itself)
 		stackBuilder.addParentStack(DeviceControlActivity.class);
-		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
-		// PendingIntent resultPendingIntent =
-		// PendingIntent.getActivity(getApplicationContext(), NOTIFICATION_ID,
-		// resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(NOTIFICATION_ID, PendingIntent.FLAG_UPDATE_CURRENT
 				| PendingIntent.FLAG_ONE_SHOT);
 		mBuilder.setContentIntent(resultPendingIntent);
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification notification = mBuilder.build();
-		// mId allows you to update the notification later on.
 		mNotificationManager.notify(NOTIFICATION_ID, notification);
+	}
+
+	private void showSOSNotification() {
+		RemoteViews expandedView = new RemoteViews("com.armor.brelo",
+					R.layout.notification_sos);
+		expandedView.setImageViewResource(R.id.image, R.drawable.ic_launcher);
+		expandedView.setTextViewText(R.id.title, "Armor");
+		expandedView.setTextViewText(R.id.text, "Your are being intruded");
+		expandedView.setTextColor(R.id.title, Color.BLACK);
+		expandedView.setTextColor(R.id.text, Color.BLACK);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle("Armor SOS").setContentText("Your are being intruded");
+		// Creates an explicit intent for an Activity in your app
+		isNotificationActive = true;
+		Intent resultIntent = new Intent(getApplicationContext(), DeviceControlActivity.class);
+		resultIntent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, deviceName);
+		resultIntent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, deviceAddress);
+		resultIntent.putExtra("NOTIFICATION", true);
+
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+		stackBuilder.addParentStack(DeviceControlActivity.class);
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(NOTIFICATION_ID, PendingIntent.FLAG_UPDATE_CURRENT
+				| PendingIntent.FLAG_ONE_SHOT);
+		mBuilder.setContentIntent(resultPendingIntent);
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = mBuilder.build();
+		notification.contentView = expandedView;
+		mNotificationManager.notify(0, notification);
 	}
 }
 
