@@ -27,12 +27,12 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.armor.brelo.ui.MainActivity;
-import com.armor.brelo.ui.SplashActivity;
+import com.armor.brelo.utils.SOSIntentService;
 
 public class ArmorService extends Service {
 
 	private BluetoothAdapter mBluetoothAdapter;
+	public static final int REQUEST_CODE_SOS_DISMISS = 1;
 
 	public static boolean alarmActive;
 
@@ -114,6 +114,11 @@ public class ArmorService extends Service {
 		}
 	};
 
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		return START_STICKY;
+	}
+
 	/*
 	public void onDestroy(){
 		super.onDestroy();
@@ -167,10 +172,10 @@ public class ArmorService extends Service {
 			auto_unlock_enabled = preferences.getBoolean("auto_unlock", false);
  			if (deviceName!=null && deviceName.contains("SOS") && sos_enabled) {
 //				if (!alarmActive) {
-					Intent intent = new Intent(ArmorService.this, AlarmActivity.class);
+					/*Intent intent = new Intent(ArmorService.this, AlarmActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					getApplication().startActivity(intent);
-					 showSOSNotification();
+					getApplication().startActivity(intent);*/
+					 showSOSNotification(deviceAddress, deviceName);
 //				showManualNotification();
 					alarmActive = !alarmActive;
 //				}
@@ -311,16 +316,14 @@ public class ArmorService extends Service {
 		mNotificationManager.notify(NOTIFICATION_ID, notification);
 	}
 
-	private void showSOSNotification() {
+	private void showSOSNotification(String deviceAddress, String deviceName) {
 		RemoteViews expandedView = new RemoteViews("com.armor.brelo",
 					R.layout.notification_sos);
 		expandedView.setImageViewResource(R.id.image, R.drawable.ic_launcher);
 		expandedView.setTextViewText(R.id.title, "Armor");
-		expandedView.setTextViewText(R.id.text, "Your are being intruded");
+		expandedView.setTextViewText(R.id.text, "You are being intruded");
 		expandedView.setTextColor(R.id.title, Color.BLACK);
 		expandedView.setTextColor(R.id.text, Color.BLACK);
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
-				.setContentTitle("Armor SOS").setContentText("Your are being intruded");
 		// Creates an explicit intent for an Activity in your app
 		isNotificationActive = true;
 		Intent resultIntent = new Intent(getApplicationContext(), DeviceControlActivity.class);
@@ -333,6 +336,13 @@ public class ArmorService extends Service {
 		stackBuilder.addNextIntent(resultIntent);
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(NOTIFICATION_ID, PendingIntent.FLAG_UPDATE_CURRENT
 				| PendingIntent.FLAG_ONE_SHOT);
+		Intent sosIntent = new Intent(this, SOSIntentService.class);
+		sosIntent.putExtra(SOSIntentService.EXTRA_DEVICE_ADDRESS, deviceAddress);
+		PendingIntent sosPendingIntent = PendingIntent.getService(this, REQUEST_CODE_SOS_DISMISS, sosIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle(deviceName).setContentText("You are being intruded").setPriority(Notification.PRIORITY_HIGH)
+				.addAction(android.R.drawable.ic_menu_close_clear_cancel,"Dismiss", sosPendingIntent)
+				.setDeleteIntent(sosPendingIntent).setAutoCancel(true);
 		mBuilder.setContentIntent(resultPendingIntent);
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification notification = mBuilder.build();
