@@ -40,10 +40,13 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.armor.brelo.controller.LockManager;
 import com.armor.brelo.db.model.Lock;
 import com.armor.brelo.ui.LockFragment;
 import com.armor.brelo.utils.ApplicationSettings;
 import com.armor.brelo.utils.MessageUtil;
+
+import io.realm.Realm;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect,
@@ -125,6 +128,12 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 			} else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
 				byte data = intent.getByteExtra(BluetoothLeService.EXTRA_DATA, (byte) 0);
 				Log.e(TAG, "Read characteristing data  " + data);
+				Realm.getDefaultInstance().beginTransaction();
+				Lock lock = LockManager.getLock(mDeviceAddress);
+				lock.setInProximity(true);
+				lock.setLockStatus(data);
+				LockManager.updateLock(lock);
+				Realm.getDefaultInstance().commitTransaction();
 				ApplicationSettings.BreloSharedPreferences.getInstance().putInt(ApplicationSettings.PREF_KEY_LOCK_STATUS, data, DeviceControlActivity.this);
 				currentLockIndex = data;
 				runOnUiThread(new Runnable() {
@@ -265,13 +274,13 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 	public void onLockClick() {
 		switch (currentLockIndex) {
 			case Lock.LOCK_STATUS_OPEN:
-				mLockFragment.updateLockUI(Lock.LOCK_STATUS_CLOSED);
-				sendUnlockCommand(Lock.LOCK_STATUS_CLOSED);
+//				mLockFragment.updateLockUI(Lock.LOCK_STATUS_CLOSED);
+//				sendUnlockCommand(Lock.LOCK_STATUS_CLOSED);
 //						currentLockIndex = 2;
 				break;
 			case Lock.LOCK_STATUS_CLOSED:
-				mLockFragment.updateLockUI(Lock.LOCK_STATUS_LOCKED);
-				sendUnlockCommand(Lock.LOCK_STATUS_LOCKED);
+				mLockFragment.updateLockUI(Lock.LOCK_STATUS_OPEN);
+				sendUnlockCommand(Lock.LOCK_STATUS_OPEN);
 //						currentLockIndex = 3;
 				break;
 			case Lock.LOCK_STATUS_LOCKED:
@@ -288,6 +297,11 @@ public class DeviceControlActivity extends FragmentActivity implements LockFragm
 			case Lock.LOCK_STATUS_LOCKED:
 				mLockFragment.updateLockUI(Lock.LOCK_STATUS_OPEN);
 				sendUnlockCommand(Lock.LOCK_STATUS_OPEN);
+//						currentLockIndex = 1;
+				break;
+			case Lock.LOCK_STATUS_CLOSED:
+				mLockFragment.updateLockUI(Lock.LOCK_STATUS_LOCKED);
+				sendUnlockCommand(Lock.LOCK_STATUS_LOCKED);
 //						currentLockIndex = 1;
 				break;
 			default:
